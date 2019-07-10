@@ -1,0 +1,23 @@
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mime-types: application/javascript,text/css,application/json,application/xml,text/html,text/xml,text/plain
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/xblog?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+  mvc:
+    favicon:
+      enabled: false
+  session:
+    store-type: redis
+
+mybatis:
+  type-aliases-package: com.wuyuncheng.xblog.model.entity #扫描 entity 类
+  configuration:
+    map-underscore-to-camel-case: true # 驼峰匹配
+  mapper-locations: classpath:mapper/*Mapper.xml
