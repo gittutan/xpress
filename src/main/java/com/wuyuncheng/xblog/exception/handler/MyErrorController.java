@@ -6,14 +6,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 
+@ApiIgnore
 @RestController
 public class MyErrorController implements ErrorController {
 
     @RequestMapping("/error")
-    public ResponseEntity error(HttpServletResponse response) {
+    public ResponseEntity<ErrorResponse> error(HttpServletResponse response) {
         int statusCode = response.getStatus();
         return ResponseEntity
                 .status(statusCode)

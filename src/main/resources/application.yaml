@@ -10,11 +10,25 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/xblog?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    timeout: 60s
+    lettuce:
+      shutdown-timeout: 60s
+      pool:
+        max-active: 80
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
   mvc:
     favicon:
       enabled: false
   session:
     store-type: redis
+  cache:
+    type: redis # Spring Cache Use Redis
 
 mybatis:
   type-aliases-package: com.wuyuncheng.xblog.model.entity #扫描 entity 类

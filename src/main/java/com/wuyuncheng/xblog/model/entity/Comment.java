@@ -2,8 +2,10 @@ package com.wuyuncheng.xblog.model.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class Comment {
+public class Comment implements Serializable {
     private Integer commentId;
     private Integer postId;
     private String status;

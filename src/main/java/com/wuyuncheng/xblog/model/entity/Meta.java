@@ -2,8 +2,10 @@ package com.wuyuncheng.xblog.model.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class Meta {
+public class Meta implements Serializable {
     private Integer metaId;
     private String name;
     private String slug;
