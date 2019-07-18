@@ -7,7 +7,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/xblog?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/xpress?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root
   redis:
@@ -31,7 +31,7 @@ spring:
     type: redis # Spring Cache Use Redis
 
 #mybatis:
-#  type-aliases-package: com.wuyuncheng.xblog.model.entity #扫描 entity 类
+#  type-aliases-package: com.wuyuncheng.xpress.model.entity #扫描 entity 类
 #  configuration:
 #    map-underscore-to-camel-case: true # 驼峰匹配
 #  mapper-locations: classpath:mapper/*Mapper.xml
@@ -39,7 +39,7 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
-  type-aliases-package: com.wuyuncheng.xblog.model.entity
+  type-aliases-package: com.wuyuncheng.xpress.model.entity
   global-config:
     # 数据库相关配置
     db-config:

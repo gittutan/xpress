@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.wuyuncheng</groupId>
-    <artifactId>xblog</artifactId>
+    <artifactId>xpress</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>xblog</name>
+    <name>xpress</name>
     <description>Just a Java blog system.</description>
 
     <properties>
