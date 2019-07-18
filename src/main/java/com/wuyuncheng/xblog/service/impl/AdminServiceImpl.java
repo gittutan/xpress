@@ -1,5 +1,6 @@
 package com.wuyuncheng.xblog.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wuyuncheng.xblog.config.Constant;
 import com.wuyuncheng.xblog.exception.LoginException;
 import com.wuyuncheng.xblog.model.dao.UserDAO;
@@ -29,7 +30,8 @@ public class AdminServiceImpl implements AdminService {
     public AuthToken auth(LoginParam loginParam) {
         String username = loginParam.getUsername();
         String passwordMD5 = DigestUtils.md5DigestAsHex(loginParam.getPassword().getBytes());
-        User user = userDAO.findByUsername(username);
+//        User user = userDAO.findByUsername(username);
+        User user = userDAO.selectOne(new QueryWrapper<User>().eq("username", username));
         if (null == user) {
             throw new LoginException("用户名或密码错误");
         }
@@ -53,7 +55,8 @@ public class AdminServiceImpl implements AdminService {
          * Throw SQLIntegrityConstraintViolationException.class
          * Manual catch DataIntegrityViolationException.class
          */
-        userDAO.insertOne(user);
+//        userDAO.insertOne(user);
+        userDAO.insert(user);
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
         return userDTO;

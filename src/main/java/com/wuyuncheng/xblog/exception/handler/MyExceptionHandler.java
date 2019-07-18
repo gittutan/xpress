@@ -46,9 +46,10 @@ public class MyExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity exception() {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ErrorResponse.message("不知道为啥出错了"));
+                .status(status)
+                .body(ErrorResponse.message(status.getReasonPhrase()));
     }
 
 }

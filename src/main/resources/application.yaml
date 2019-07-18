@@ -30,8 +30,28 @@ spring:
   cache:
     type: redis # Spring Cache Use Redis
 
-mybatis:
-  type-aliases-package: com.wuyuncheng.xblog.model.entity #扫描 entity 类
+#mybatis:
+#  type-aliases-package: com.wuyuncheng.xblog.model.entity #扫描 entity 类
+#  configuration:
+#    map-underscore-to-camel-case: true # 驼峰匹配
+#  mapper-locations: classpath:mapper/*Mapper.xml
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  type-aliases-package: com.wuyuncheng.xblog.model.entity
+  global-config:
+    # 数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID",ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: auto
+      #驼峰下划线转换
+      column-underline: true
+  # 原生配置
   configuration:
-    map-underscore-to-camel-case: true # 驼峰匹配
-  mapper-locations: classpath:mapper/*Mapper.xml
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+##logging
+#logging:
+#  level: warn

@@ -1,5 +1,6 @@
 package com.wuyuncheng.xblog.config;
 
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -171,6 +172,14 @@ public class XBlogConfiguration implements WebMvcConfigurer {
                 .contact(new Contact("Wu YunCheng", "https://github.com/wuyc", "vincentgo8848+xblog@gmail.com"))
                 .version("1.0")
                 .build();
+    }
+
+    /**
+     * 分页插件，自动识别数据库类型
+     */
+    @Bean
+    public PaginationInterceptor paginationInterceptor() {
+        return new PaginationInterceptor();
     }
 
 }
