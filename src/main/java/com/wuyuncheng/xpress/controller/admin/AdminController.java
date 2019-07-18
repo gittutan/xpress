@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Api(tags = {"用户操作接口"})
 @RestController
 @RequestMapping("/api")
 public class AdminController {

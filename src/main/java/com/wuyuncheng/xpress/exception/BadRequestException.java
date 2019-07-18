@@ -2,19 +2,19 @@ package com.wuyuncheng.xpress.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class AuthException extends BadRequestException {
+public class BadRequestException extends BaseException {
 
-    public AuthException(String message) {
+    public BadRequestException(String message) {
         super(message);
     }
 
-    public AuthException(String message, Throwable cause) {
+    public BadRequestException(String message, Throwable cause) {
         super(message, cause);
     }
 
     @Override
     public HttpStatus getStatus() {
-        return HttpStatus.UNAUTHORIZED;
+        return HttpStatus.BAD_REQUEST;
     }
 
 }

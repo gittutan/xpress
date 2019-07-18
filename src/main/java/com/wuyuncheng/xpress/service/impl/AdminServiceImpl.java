@@ -2,7 +2,7 @@ package com.wuyuncheng.xpress.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wuyuncheng.xpress.config.Constant;
-import com.wuyuncheng.xpress.exception.LoginException;
+import com.wuyuncheng.xpress.exception.AuthException;
 import com.wuyuncheng.xpress.model.dao.UserDAO;
 import com.wuyuncheng.xpress.model.dto.UserDTO;
 import com.wuyuncheng.xpress.model.entity.User;
@@ -33,10 +33,10 @@ public class AdminServiceImpl implements AdminService {
 //        User user = userDAO.findByUsername(username);
         User user = userDAO.selectOne(new QueryWrapper<User>().eq("username", username));
         if (null == user) {
-            throw new LoginException("用户名或密码错误");
+            throw new AuthException("用户名或密码错误");
         }
         if (!(passwordMD5.equals(user.getPassword()))) {
-            throw new LoginException("用户名或密码错误");
+            throw new AuthException("用户名或密码错误");
         }
         return createToken(user);
     }
@@ -53,7 +53,7 @@ public class AdminServiceImpl implements AdminService {
         user.setCreated(DateUtils.nowUnix());
         /**
          * Throw SQLIntegrityConstraintViolationException.class
-         * Manual catch DataIntegrityViolationException.class
+         * Catch DataIntegrityViolationException.class
          */
 //        userDAO.insertOne(user);
         userDAO.insert(user);
