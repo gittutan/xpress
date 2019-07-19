@@ -52,6 +52,5 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: false
 
-##logging
 #logging:
 #  level: warn

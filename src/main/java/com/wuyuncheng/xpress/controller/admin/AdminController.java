@@ -1,6 +1,5 @@
 package com.wuyuncheng.xpress.controller.admin;
 
-import com.wuyuncheng.xpress.config.Constant;
 import com.wuyuncheng.xpress.model.dto.UserDTO;
 import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
@@ -25,15 +24,6 @@ public class AdminController {
     public AuthToken login(@Valid LoginParam loginParam) {
         AuthToken token = adminService.auth(loginParam);
         return token;
-    }
-
-    @ApiOperation("注销")
-    @DeleteMapping("/logout")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout(
-            @ApiParam("token")
-            @RequestHeader(Constant.HEADER_TOKEN) String token) {
-        adminService.clearToken(token);
     }
 
     @ApiOperation("创建帐号")

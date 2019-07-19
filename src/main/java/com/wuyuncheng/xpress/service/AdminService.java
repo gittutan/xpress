@@ -8,7 +8,6 @@ import com.wuyuncheng.xpress.model.vo.AuthToken;
 public interface AdminService {
 
     AuthToken auth(LoginParam loginParam);
-    void clearToken(String sessionId);
     UserDTO createUser(UserParam userParam);
 
 }
