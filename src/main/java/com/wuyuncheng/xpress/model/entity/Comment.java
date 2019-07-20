@@ -1,11 +1,14 @@
 package com.wuyuncheng.xpress.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
 public class Comment implements Serializable {
+
+    @TableId
     private Integer commentId;
     private Integer postId;
     private String status;
@@ -17,4 +20,5 @@ public class Comment implements Serializable {
     private String useragent;
     private Integer parent;
     private Integer created;
+
 }

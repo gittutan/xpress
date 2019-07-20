@@ -28,6 +28,13 @@ public class XPressExceptionHandler {
                 .body(MessageResponse.message(e.getMessage()));
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<MessageResponse> illegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(MessageResponse.message(e.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<MessageResponse> exception() {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;

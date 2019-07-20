@@ -17,7 +17,7 @@ public class XPressConfiguration {
         corsFilter.setFilter(new CorsFilter());
         corsFilter.setName("CorsFilter");
         corsFilter.setOrder(Ordered.HIGHEST_PRECEDENCE + 10);
-        corsFilter.addUrlPatterns("/api/*");
+        corsFilter.addUrlPatterns("/api/**");
         return corsFilter;
     }
 

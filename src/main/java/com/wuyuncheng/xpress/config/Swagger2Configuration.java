@@ -27,7 +27,7 @@ public class Swagger2Configuration {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("XBLOG RESTful API 文档")
+                .title("XPress RESTful API 文档")
                 .description("Github: https://github.com/wuyc/xpress")
 //                .termsOfServiceUrl("https://github.com/wuyc/xblog/blob/master/LICENSE")
                 .contact(new Contact("Wu YunCheng", "https://github.com/wuyc", "vincentgo8848+xpress@gmail.com"))
