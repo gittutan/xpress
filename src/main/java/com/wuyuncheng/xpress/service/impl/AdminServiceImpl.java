@@ -3,9 +3,10 @@ package com.wuyuncheng.xpress.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.AuthException;
+import com.wuyuncheng.xpress.exception.NotFoundException;
+import com.wuyuncheng.xpress.exception.ServiceException;
 import com.wuyuncheng.xpress.model.dao.PostDAO;
 import com.wuyuncheng.xpress.model.dao.UserDAO;
-import com.wuyuncheng.xpress.model.dto.UserDTO;
 import com.wuyuncheng.xpress.model.dto.UserDetailDTO;
 import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.entity.User;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.DigestUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,36 +41,30 @@ public class AdminServiceImpl implements AdminService {
         String username = loginParam.getUsername();
         String passwordMD5 = DigestUtils.md5DigestAsHex(loginParam.getPassword().getBytes());
         User user = userDAO.selectOne(new QueryWrapper<User>().eq("username", username));
-        if (null == user) {
-            throw new AuthException("用户名或密码错误");
-        }
-        if (!(passwordMD5.equals(user.getPassword()))) {
+        if (null == user || !(passwordMD5.equals(user.getPassword()))) {
             throw new AuthException("用户名或密码错误");
         }
         return createToken(user.getUsername());
     }
 
     @Override
-    public UserDTO createUser(UserParam userParam) {
-        // 检查用户名是否已存在
-        String username = userParam.getUsername();
-        if (null != userDAO.selectOne(new QueryWrapper<User>().eq("username", username))) {
-            throw new AlreadyExistsException("该用户已存在");
-        }
+    public void createUser(UserParam userParam) {
+        userMustNotExist(userParam.getUsername());
+
         User user = new User();
         BeanUtils.copyProperties(userParam, user);
         user.setCreated(DateUtils.nowUnix());
         String password = user.getPassword();
         String passwordMD5 = DigestUtils.md5DigestAsHex(password.getBytes());
         user.setPassword(passwordMD5);
-        userDAO.insert(user);
-        UserDTO userDTO = new UserDTO();
-        BeanUtils.copyProperties(user, userDTO);
-        return userDTO;
+        int row = userDAO.insert(user);
+        if (row == 0) {
+            throw new ServiceException("用户创建失败");
+        }
     }
 
     @Override
-    public List<UserDetailDTO> listUserDetail() {
+    public List<UserDetailDTO> listUsers() {
         List<User> users = userDAO.selectList(null);
         List<Post> posts = postDAO.selectList(null);
         return convertToUserDetailDTOList(users, posts);
@@ -76,8 +72,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void deleteUser(Integer userId) {
-        Assert.notNull(userDAO.selectById(userId), "没有此用户");
-        userDAO.deleteById(userId);
+        userMustExist(userId);
+
+        int row = userDAO.deleteById(userId);
+        if (row == 0) {
+            throw new ServiceException("用户删除失败");
+        }
     }
 
     @Override
@@ -89,19 +89,49 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public int updateUser(EditUserParam editUserParam) {
+    public void updateUser(EditUserParam editUserParam) {
+        userMustExist(editUserParam.getUserId());
+
         User user = new User();
         BeanUtils.copyProperties(editUserParam, user);
         String password = user.getPassword();
         String passwordMD5 = DigestUtils.md5DigestAsHex(password.getBytes());
         user.setPassword(passwordMD5);
-        return userDAO.updateById(user);
+        int row = userDAO.updateById(user);
+        if (row == 0) {
+            throw new ServiceException("用户更新失败");
+        }
+    }
+
+    /**
+     * 该用户不存在时抛出异常
+     */
+    private void userMustExist(Serializable idOrName) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<User>()
+                .eq("user_id", idOrName)
+                .or()
+                .eq("username", idOrName);
+        if (null == userDAO.selectOne(queryWrapper)) {
+            throw new NotFoundException("该用户不存在");
+        }
+    }
+
+    /**
+     * 该用户存在时抛出异常
+     */
+    private void userMustNotExist(Serializable idOrName) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<User>()
+                .eq("user_id", idOrName)
+                .or()
+                .eq("username", idOrName);
+        if (null != userDAO.selectOne(queryWrapper)) {
+            throw new AlreadyExistsException("该用户已存在");
+        }
     }
 
     private AuthToken createToken(String username) {
         String token = JWTUtils.generateToken(username);
-        AuthToken authToken = new AuthToken(token);
-        return authToken;
+        return new AuthToken(token);
     }
 
     private List<UserDetailDTO> convertToUserDetailDTOList(List<User> users, List<Post> posts) {

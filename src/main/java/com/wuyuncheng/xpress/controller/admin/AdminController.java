@@ -1,7 +1,5 @@
 package com.wuyuncheng.xpress.controller.admin;
 
-import com.wuyuncheng.xpress.exception.NotFoundException;
-import com.wuyuncheng.xpress.model.dto.UserDTO;
 import com.wuyuncheng.xpress.model.dto.UserDetailDTO;
 import com.wuyuncheng.xpress.model.entity.User;
 import com.wuyuncheng.xpress.model.param.EditUserParam;
@@ -13,7 +11,6 @@ import com.wuyuncheng.xpress.util.MessageResponse;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,30 +27,28 @@ public class AdminController {
     @ApiOperation("登陆")
     @GetMapping("/login")
     public AuthToken login(@Valid LoginParam loginParam) {
-        AuthToken token = adminService.auth(loginParam);
-        return token;
+        return adminService.auth(loginParam);
     }
 
     @ApiOperation("创建帐号")
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO createUser(@Valid UserParam userParam) {
-        UserDTO userDTO = adminService.createUser(userParam);
-        return userDTO;
+    public void createUser(@Valid UserParam userParam) {
+        adminService.createUser(userParam);
     }
 
-    @ApiOperation("用户列表")
+    @ApiOperation("获取用户列表")
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDetailDTO> listUserDetail() {
-        return adminService.listUserDetail();
+    public List<UserDetailDTO> listUsers() {
+        return adminService.listUsers();
     }
 
     @ApiOperation("删除用户")
     @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Integer id) {
-        Assert.notNull(id, "Id 不能为空");
+        Assert.notNull(id, "ID 不能为空");
         adminService.deleteUser(id);
     }
 
@@ -61,20 +56,16 @@ public class AdminController {
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public User getUser(@PathVariable Integer id) {
-        Assert.notNull(id, "Id 不能为空");
+        Assert.notNull(id, "ID 不能为空");
         return adminService.findUser(id);
     }
 
     @ApiOperation("更新用户")
     @PutMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<MessageResponse> updateUser(@Valid EditUserParam editUserParam) {
-        int row = adminService.updateUser(editUserParam);
-        if (0 == row) {
-            throw new NotFoundException("该用户不存在");
-        }
-        return ResponseEntity.ok()
-                .body(MessageResponse.message("用户信息更新成功"));
+    public MessageResponse updateUser(@Valid EditUserParam editUserParam) {
+        adminService.updateUser(editUserParam);
+        return MessageResponse.message("用户信息更新成功");
     }
 
 }

@@ -1,7 +1,6 @@
 package com.wuyuncheng.xpress;
 
-import com.wuyuncheng.xpress.model.dao.UserDAO;
-import com.wuyuncheng.xpress.service.AdminService;
+import com.wuyuncheng.xpress.model.dao.MetaDAO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class ApplicationTests {
 
     @Autowired
-    private AdminService adminService;
-    @Autowired
-    private UserDAO userDAO;
+    private MetaDAO metaDAO;
 
     @Test
     public void contextLoads() {
