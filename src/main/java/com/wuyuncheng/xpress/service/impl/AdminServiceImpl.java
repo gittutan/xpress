@@ -7,6 +7,7 @@ import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.exception.ServiceException;
 import com.wuyuncheng.xpress.model.dao.PostDAO;
 import com.wuyuncheng.xpress.model.dao.UserDAO;
+import com.wuyuncheng.xpress.model.dto.UserDTO;
 import com.wuyuncheng.xpress.model.dto.UserDetailDTO;
 import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.entity.User;
@@ -81,11 +82,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public User findUser(Integer userId) {
+    public UserDTO findUser(Integer userId) {
         User user = userDAO.selectById(userId);
-        Assert.notNull(user, "没有此用户");
-        user.setPassword("");
-        return user;
+        Assert.notNull(user, "该用户不存在");
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(user, userDTO);
+        return userDTO;
     }
 
     @Override

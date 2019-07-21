@@ -1,18 +1,14 @@
 package com.wuyuncheng.xpress.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
-@JsonPropertyOrder({"id"})
-@Data
-public class CategoryDTO {
+import java.io.Serializable;
 
-    @JsonProperty("id")
-    private Integer metaId;
+@Data
+public class CategoryDTO implements Serializable {
+
     private String name;
     private String slug;
     private String description;
-    private Integer count;
 
 }

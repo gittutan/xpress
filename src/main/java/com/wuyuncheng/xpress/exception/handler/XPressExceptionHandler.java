@@ -8,6 +8,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class XPressExceptionHandler {
@@ -20,18 +21,25 @@ public class XPressExceptionHandler {
                 .body(MessageResponse.message(msg));
     }
 
-    @ExceptionHandler(BaseException.class)
-    public ResponseEntity<MessageResponse> baseException(BaseException e) {
-        HttpStatus status = e.getStatus();
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<MessageResponse> methodArgumentTypeMismatchException(NumberFormatException e) {
         return ResponseEntity
-                .status(status)
-                .body(MessageResponse.message(e.getMessage()));
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(MessageResponse.message("参数错误: " + e.getMessage()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<MessageResponse> illegalArgumentException(IllegalArgumentException e) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(MessageResponse.message(e.getMessage()));
+    }
+
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<MessageResponse> baseException(BaseException e) {
+        HttpStatus status = e.getStatus();
+        return ResponseEntity
+                .status(status)
                 .body(MessageResponse.message(e.getMessage()));
     }
 

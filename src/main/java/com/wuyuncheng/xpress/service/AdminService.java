@@ -1,7 +1,7 @@
 package com.wuyuncheng.xpress.service;
 
+import com.wuyuncheng.xpress.model.dto.UserDTO;
 import com.wuyuncheng.xpress.model.dto.UserDetailDTO;
-import com.wuyuncheng.xpress.model.entity.User;
 import com.wuyuncheng.xpress.model.param.EditUserParam;
 import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
@@ -15,7 +15,7 @@ public interface AdminService {
     void createUser(UserParam userParam);
     List<UserDetailDTO> listUsers();
     void deleteUser(Integer userId);
-    User findUser(Integer userId);
+    UserDTO findUser(Integer userId);
     void updateUser(EditUserParam editUserParam);
 
 }

@@ -1,7 +1,7 @@
 package com.wuyuncheng.xpress.controller.admin;
 
+import com.wuyuncheng.xpress.model.dto.UserDTO;
 import com.wuyuncheng.xpress.model.dto.UserDetailDTO;
-import com.wuyuncheng.xpress.model.entity.User;
 import com.wuyuncheng.xpress.model.param.EditUserParam;
 import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
@@ -48,15 +48,15 @@ public class AdminController {
     @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Integer id) {
-        Assert.notNull(id, "ID 不能为空");
+        Assert.notNull(id, "用户 ID 不能为空");
         adminService.deleteUser(id);
     }
 
     @ApiOperation("获取单个用户")
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User getUser(@PathVariable Integer id) {
-        Assert.notNull(id, "ID 不能为空");
+    public UserDTO getUser(@PathVariable Integer id) {
+        Assert.notNull(id, "用户 ID 不能为空");
         return adminService.findUser(id);
     }
 
