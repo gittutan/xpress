@@ -17,6 +17,7 @@ import com.wuyuncheng.xpress.service.RelationshipService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.*;
@@ -44,6 +45,7 @@ public class MetaServiceImpl implements MetaService {
         return metaDetailDTOList;
     }
 
+    @Transactional
     @Override
     public void deleteMeta(Integer metaId, MetaType metaType) {
         metaMustExist(metaId, metaType);
@@ -68,6 +70,7 @@ public class MetaServiceImpl implements MetaService {
             relationshipService.remove(relationshipQueryWrapper);
         }
 
+        // 删除 Meta 表中的数据
         int row = metaDAO.deleteById(metaId);
         Assert.state(row != 0, "删除失败");
     }
