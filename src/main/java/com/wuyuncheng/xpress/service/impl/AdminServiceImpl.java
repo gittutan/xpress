@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.AuthException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
-import com.wuyuncheng.xpress.exception.ServiceException;
 import com.wuyuncheng.xpress.model.dao.PostDAO;
 import com.wuyuncheng.xpress.model.dao.UserDAO;
 import com.wuyuncheng.xpress.model.dto.UserDTO;
@@ -59,15 +58,14 @@ public class AdminServiceImpl implements AdminService {
         String passwordMD5 = DigestUtils.md5DigestAsHex(password.getBytes());
         user.setPassword(passwordMD5);
         int row = userDAO.insert(user);
-        if (row == 0) {
-            throw new ServiceException("用户创建失败");
-        }
+        Assert.state(row == 0, "用户创建失败");
     }
 
     @Override
     public List<UserDetailDTO> listUsers() {
         List<User> users = userDAO.selectList(null);
         List<Post> posts = postDAO.selectList(null);
+        Assert.notEmpty(users, "用户列表为空");
         return convertToUserDetailDTOList(users, posts);
     }
 
@@ -76,9 +74,7 @@ public class AdminServiceImpl implements AdminService {
         userMustExist(userId);
 
         int row = userDAO.deleteById(userId);
-        if (row == 0) {
-            throw new ServiceException("用户删除失败");
-        }
+        Assert.state(row == 0, "用户删除失败");
     }
 
     @Override
@@ -100,9 +96,7 @@ public class AdminServiceImpl implements AdminService {
         String passwordMD5 = DigestUtils.md5DigestAsHex(password.getBytes());
         user.setPassword(passwordMD5);
         int row = userDAO.updateById(user);
-        if (row == 0) {
-            throw new ServiceException("用户更新失败");
-        }
+        Assert.state(row == 0, "用户更新失败");
     }
 
     /**

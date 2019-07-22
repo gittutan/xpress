@@ -44,9 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMustExist(metaId);
 
         int row = metaDAO.deleteById(metaId);
-        if (row == 0) {
-            throw new ServiceException("分类删除失败");
-        }
+        Assert.state(row == 0, "分类删除失败");
     }
 
     @Override
@@ -58,9 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
         meta.setType(MetaType.CATEGORY.getValue());
         meta.setCount(0);
         int row = metaDAO.insert(meta);
-        if (row == 0) {
-            throw new ServiceException("分类创建失败");
-        }
+        Assert.state(row == 0, "分类创建失败");
     }
 
     @Override
@@ -83,11 +79,12 @@ public class CategoryServiceImpl implements CategoryService {
         BeanUtils.copyProperties(editCategoryParam, meta);
         meta.setType(MetaType.CATEGORY.getValue());
         int row = metaDAO.updateById(meta);
-        if (row == 0) {
-            throw new ServiceException("分类更新失败");
-        }
+        Assert.state(row == 0, "分类更新失败");
     }
 
+    /**
+     * 该分类不存在时抛出异常
+     */
     private void categoryMustExist(Integer metaId) {
         QueryWrapper<Meta> queryWrapper = new QueryWrapper<Meta>()
                 .eq("meta_id", metaId);
@@ -96,6 +93,9 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    /**
+     * 该分类存在时抛出异常
+     */
     private void categoryMustNotExist(String metaName, String metaSlug) {
         QueryWrapper<Meta> queryWrapper = new QueryWrapper<Meta>()
                 .eq("name", metaName)
