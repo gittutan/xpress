@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class CategoryDTO implements Serializable {
+public class MetaDTO implements Serializable {
 
     private String name;
     private String slug;

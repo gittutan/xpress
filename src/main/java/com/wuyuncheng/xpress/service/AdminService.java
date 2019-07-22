@@ -16,6 +16,6 @@ public interface AdminService {
     List<UserDetailDTO> listUsers();
     void deleteUser(Integer userId);
     UserDTO findUser(Integer userId);
-    void updateUser(EditUserParam editUserParam);
+    void updateUser(EditUserParam editUserParam, Integer userId);
 
 }

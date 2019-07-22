@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @JsonPropertyOrder({"id"})
 @Data
-public class CategoryDetailDTO implements Serializable {
+public class MetaDetailDTO implements Serializable {
 
     @JsonProperty("id")
     private Integer metaId;

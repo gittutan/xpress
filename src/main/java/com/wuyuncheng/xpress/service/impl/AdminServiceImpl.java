@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.AuthException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
-import com.wuyuncheng.xpress.model.dao.PostDAO;
 import com.wuyuncheng.xpress.model.dao.UserDAO;
 import com.wuyuncheng.xpress.model.dto.UserDTO;
 import com.wuyuncheng.xpress.model.dto.UserDetailDTO;
@@ -16,6 +15,7 @@ import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
 import com.wuyuncheng.xpress.model.vo.AuthToken;
 import com.wuyuncheng.xpress.service.AdminService;
+import com.wuyuncheng.xpress.service.PostService;
 import com.wuyuncheng.xpress.util.DateUtils;
 import com.wuyuncheng.xpress.util.JWTUtils;
 import org.springframework.beans.BeanUtils;
@@ -34,7 +34,7 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private UserDAO userDAO;
     @Autowired
-    private PostDAO postDAO;
+    private PostService postService;
 
     @Override
     public AuthToken auth(LoginParam loginParam) {
@@ -58,14 +58,13 @@ public class AdminServiceImpl implements AdminService {
         String passwordMD5 = DigestUtils.md5DigestAsHex(password.getBytes());
         user.setPassword(passwordMD5);
         int row = userDAO.insert(user);
-        Assert.state(row == 0, "用户创建失败");
+        Assert.state(row != 0, "用户创建失败");
     }
 
     @Override
     public List<UserDetailDTO> listUsers() {
         List<User> users = userDAO.selectList(null);
-        List<Post> posts = postDAO.selectList(null);
-        Assert.notEmpty(users, "用户列表为空");
+        List<Post> posts = postService.list();
         return convertToUserDetailDTOList(users, posts);
     }
 
@@ -74,29 +73,32 @@ public class AdminServiceImpl implements AdminService {
         userMustExist(userId);
 
         int row = userDAO.deleteById(userId);
-        Assert.state(row == 0, "用户删除失败");
+        Assert.state(row != 0, "用户删除失败");
     }
 
     @Override
     public UserDTO findUser(Integer userId) {
         User user = userDAO.selectById(userId);
-        Assert.notNull(user, "该用户不存在");
+        if (null == user) {
+            throw new NotFoundException("该用户不存在");
+        }
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
         return userDTO;
     }
 
     @Override
-    public void updateUser(EditUserParam editUserParam) {
-        userMustExist(editUserParam.getUserId());
+    public void updateUser(EditUserParam editUserParam, Integer userId) {
+        userMustExist(userId);
 
         User user = new User();
         BeanUtils.copyProperties(editUserParam, user);
         String password = user.getPassword();
         String passwordMD5 = DigestUtils.md5DigestAsHex(password.getBytes());
         user.setPassword(passwordMD5);
+        user.setUserId(userId);
         int row = userDAO.updateById(user);
-        Assert.state(row == 0, "用户更新失败");
+        Assert.state(row != 0, "用户更新失败");
     }
 
     /**

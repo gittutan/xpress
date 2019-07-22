@@ -10,9 +10,9 @@ import javax.validation.constraints.*;
 @Data
 public class EditUserParam {
 
-    @ApiModelProperty(value = "用户 ID", example = "123")
-    @NotNull(message = "用户 ID 不能为空")
-    private Integer userId;
+//    @ApiModelProperty(value = "用户 ID", example = "123")
+//    @NotNull(message = "用户 ID 不能为空")
+//    transient private Integer userId;
 
     @ApiModelProperty("用户名")
     @NotBlank(message = "用户名不能为空")
