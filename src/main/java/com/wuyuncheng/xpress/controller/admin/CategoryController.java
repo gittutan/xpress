@@ -4,7 +4,6 @@ import com.wuyuncheng.xpress.model.dto.MetaDTO;
 import com.wuyuncheng.xpress.model.dto.MetaDetailDTO;
 import com.wuyuncheng.xpress.model.enums.MetaType;
 import com.wuyuncheng.xpress.model.param.MetaParam;
-import com.wuyuncheng.xpress.model.param.EditMetaParam;
 import com.wuyuncheng.xpress.service.MetaService;
 import com.wuyuncheng.xpress.util.MessageResponse;
 import io.swagger.annotations.ApiOperation;
@@ -48,8 +47,9 @@ public class CategoryController {
     @ApiOperation("更新分类")
     @PutMapping("/categories/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MessageResponse updateCategory(@Valid EditMetaParam editMetaParam, @PathVariable Integer id) {
-        metaService.updateMeta(editMetaParam, id, MetaType.CATEGORY);
+    public MessageResponse updateCategory(@Valid MetaParam metaParam, @PathVariable Integer id) {
+        Assert.notNull(id, "分类 ID 不能为空");
+        metaService.updateMeta(metaParam, id, MetaType.CATEGORY);
         return MessageResponse.message("分类更新成功");
     }
 
@@ -57,6 +57,7 @@ public class CategoryController {
     @GetMapping("/categories/{id}")
     @ResponseStatus(HttpStatus.OK)
     public MetaDTO getCategory(@PathVariable Integer id) {
+        Assert.notNull(id, "分类 ID 不能为空");
         return metaService.findMeta(id, MetaType.CATEGORY);
     }
 

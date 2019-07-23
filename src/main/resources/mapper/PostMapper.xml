@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuyuncheng.xpress.model.dao.PostDAO">
+
+    <select id="selectPostDetail" resultType="PostDetailDTO">
+        SELECT post.post_id, user.username, meta.name AS 'category', post.title, post.slug, post.modified, post.password, post.comments_count, post.status
+        FROM post
+        INNER JOIN user ON post.author_id = user.user_id
+        INNER JOIN meta ON post.category_id = meta.meta_id
+    </select>
+
+</mapper>

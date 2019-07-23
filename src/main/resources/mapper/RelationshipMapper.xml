@@ -5,17 +5,17 @@
 
 <mapper namespace="com.wuyuncheng.xpress.model.dao.RelationshipDAO">
 
-    <delete id="deleteByPostIds">
-        DELETE FROM relationship
-        <where>
-            <if test="null != collection and collection.size() > 0">
-                post_id IN
-                <foreach collection="collection" item="item" index="index" open="(" close=")" separator=",">
-                    #{item}
-                </foreach>
-            </if>
-        </where>
+    <!--<delete id="deleteByPostIds">-->
+        <!--DELETE FROM relationship-->
+        <!--<where>-->
+            <!--<if test="null != collection and collection.size() > 0">-->
+                <!--post_id IN-->
+                <!--<foreach collection="collection" item="item" index="index" open="(" close=")" separator=",">-->
+                    <!--#{item}-->
+                <!--</foreach>-->
+            <!--</if>-->
+        <!--</where>-->
 
-    </delete>
+    <!--</delete>-->
 
 </mapper>

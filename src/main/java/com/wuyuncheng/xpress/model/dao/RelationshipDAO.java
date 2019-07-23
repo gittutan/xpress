@@ -9,7 +9,4 @@ import java.util.List;
 
 @Repository
 public interface RelationshipDAO extends BaseMapper<Relationship> {
-
-    int deleteByPostIds(Collection<Integer> ids);
-
 }

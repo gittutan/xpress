@@ -1,8 +1,8 @@
 package com.wuyuncheng.xpress.controller.admin;
 
 import com.wuyuncheng.xpress.model.dto.MetaDTO;
+import com.wuyuncheng.xpress.model.dto.MetaDetailDTO;
 import com.wuyuncheng.xpress.model.enums.MetaType;
-import com.wuyuncheng.xpress.model.param.EditMetaParam;
 import com.wuyuncheng.xpress.model.param.MetaParam;
 import com.wuyuncheng.xpress.service.MetaService;
 import com.wuyuncheng.xpress.util.MessageResponse;
@@ -25,7 +25,7 @@ public class TagController {
     @ApiOperation("获取标签列表")
     @GetMapping("/tags")
     @ResponseStatus(HttpStatus.OK)
-    public List<?> listTags() {
+    public List<MetaDetailDTO> listTags() {
         return metaService.listMetas(MetaType.TAG);
     }
 
@@ -47,8 +47,9 @@ public class TagController {
     @ApiOperation("更新标签")
     @PutMapping("/tags/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MessageResponse updateTag(@Valid EditMetaParam editMetaParam, @PathVariable Integer id) {
-        metaService.updateMeta(editMetaParam, id, MetaType.TAG);
+    public MessageResponse updateTag(@Valid MetaParam metaParam, @PathVariable Integer id) {
+        Assert.notNull(id, "标签 ID 不能为空");
+        metaService.updateMeta(metaParam, id, MetaType.TAG);
         return MessageResponse.message("标签更新成功");
     }
 
@@ -56,6 +57,7 @@ public class TagController {
     @GetMapping("/tags/{id}")
     @ResponseStatus(HttpStatus.OK)
     public MetaDTO getTag(@PathVariable Integer id) {
+        Assert.notNull(id, "标签 ID 不能为空");
         return metaService.findMeta(id, MetaType.TAG);
     }
 

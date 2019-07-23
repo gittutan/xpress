@@ -2,7 +2,6 @@ package com.wuyuncheng.xpress.controller.admin;
 
 import com.wuyuncheng.xpress.model.dto.UserDTO;
 import com.wuyuncheng.xpress.model.dto.UserDetailDTO;
-import com.wuyuncheng.xpress.model.param.EditUserParam;
 import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
 import com.wuyuncheng.xpress.model.vo.AuthToken;
@@ -63,9 +62,9 @@ public class AdminController {
     @ApiOperation("更新用户")
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MessageResponse updateUser(@Valid EditUserParam editUserParam, @PathVariable Integer id) {
+    public MessageResponse updateUser(@Valid UserParam userParam, @PathVariable Integer id) {
         Assert.notNull(id, "用户 ID 不能为空");
-        adminService.updateUser(editUserParam, id);
+        adminService.updateUser(userParam, id);
         return MessageResponse.message("用户信息更新成功");
     }
 

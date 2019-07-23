@@ -14,6 +14,7 @@ public class Post implements Serializable {
     private String type;
     private String password;
     private Integer authorId;
+    private Integer categoryId;
     private String title;
     private String content;
     private String slug;

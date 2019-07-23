@@ -1,15 +1,16 @@
 package com.wuyuncheng.xpress.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.MetaDAO;
 import com.wuyuncheng.xpress.model.dto.MetaDTO;
 import com.wuyuncheng.xpress.model.dto.MetaDetailDTO;
 import com.wuyuncheng.xpress.model.entity.Meta;
+import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.entity.Relationship;
 import com.wuyuncheng.xpress.model.enums.MetaType;
-import com.wuyuncheng.xpress.model.param.EditMetaParam;
 import com.wuyuncheng.xpress.model.param.MetaParam;
 import com.wuyuncheng.xpress.service.MetaService;
 import com.wuyuncheng.xpress.service.PostService;
@@ -23,7 +24,7 @@ import org.springframework.util.Assert;
 import java.util.*;
 
 @Service
-public class MetaServiceImpl implements MetaService {
+public class MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
 
     @Autowired
     private MetaDAO metaDAO;
@@ -52,16 +53,9 @@ public class MetaServiceImpl implements MetaService {
 
         // 如果是分类，删除该分类下的文章
         if (metaType.getValue().equals(MetaType.CATEGORY.getValue())) {
-            QueryWrapper<Relationship> queryWrapper = new QueryWrapper<Relationship>()
-                    .eq("meta_id", metaId);
-            // 获取该分类下的所有文章 ID
-            List<Relationship> relationships = relationshipService.list(queryWrapper);
-            Set<Integer> ids = new HashSet<>();
-            relationships.forEach(item -> ids.add(item.getPostId()));
-            // 删除对应的文章
-            postService.removeByIds(ids);
-            // 删除 Mete 表中对应的 Post
-            relationshipService.removeByPostIds(ids);
+            QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
+                    .eq("category_id", metaId);
+            postService.remove(queryWrapper);
         }
         // 如果是标签，删除 Relationship 表对应的数据
         if (metaType.getValue().equals(MetaType.TAG.getValue())) {
@@ -102,11 +96,11 @@ public class MetaServiceImpl implements MetaService {
     }
 
     @Override
-    public void updateMeta(EditMetaParam editMetaParam, Integer metaId, MetaType metaType) {
+    public void updateMeta(MetaParam metaParam, Integer metaId, MetaType metaType) {
         metaMustExist(metaId, metaType);
 
         Meta meta = new Meta();
-        BeanUtils.copyProperties(editMetaParam, meta);
+        BeanUtils.copyProperties(metaParam, meta);
         meta.setMetaId(metaId);
         int row = metaDAO.updateById(meta);
         Assert.state(row != 0, metaType.getDescription() + "更新失败");

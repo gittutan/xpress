@@ -1,6 +1,7 @@
 package com.wuyuncheng.xpress.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.AuthException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
@@ -10,7 +11,6 @@ import com.wuyuncheng.xpress.model.dto.UserDetailDTO;
 import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.entity.User;
 import com.wuyuncheng.xpress.model.enums.PostType;
-import com.wuyuncheng.xpress.model.param.EditUserParam;
 import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
 import com.wuyuncheng.xpress.model.vo.AuthToken;
@@ -21,6 +21,7 @@ import com.wuyuncheng.xpress.util.JWTUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.DigestUtils;
 
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class AdminServiceImpl implements AdminService {
+public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements AdminService {
 
     @Autowired
     private UserDAO userDAO;
@@ -68,9 +69,15 @@ public class AdminServiceImpl implements AdminService {
         return convertToUserDetailDTOList(users, posts);
     }
 
+    @Transactional
     @Override
     public void deleteUser(Integer userId) {
         userMustExist(userId);
+
+        // 删除该用户发布的所有文章
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
+                .eq("author_id", userId);
+        postService.remove(queryWrapper);
 
         int row = userDAO.deleteById(userId);
         Assert.state(row != 0, "用户删除失败");
@@ -88,11 +95,11 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateUser(EditUserParam editUserParam, Integer userId) {
+    public void updateUser(UserParam userParam, Integer userId) {
         userMustExist(userId);
 
         User user = new User();
-        BeanUtils.copyProperties(editUserParam, user);
+        BeanUtils.copyProperties(userParam, user);
         String password = user.getPassword();
         String passwordMD5 = DigestUtils.md5DigestAsHex(password.getBytes());
         user.setPassword(passwordMD5);
