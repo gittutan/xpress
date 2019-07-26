@@ -40,8 +40,9 @@ public class TagController {
     @ApiOperation("创建标签")
     @PostMapping("/tags")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createTag(@Valid MetaParam metaParam) {
+    public MessageResponse createTag(@Valid MetaParam metaParam) {
         metaService.createMeta(metaParam, MetaType.TAG);
+        return MessageResponse.message("标签创建成功");
     }
 
     @ApiOperation("更新标签")

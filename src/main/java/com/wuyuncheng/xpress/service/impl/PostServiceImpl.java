@@ -60,8 +60,10 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
     @Transactional
     @Override
     public void createPost(PostParam postParam) {
-
-        postMustNotExist(postParam.getSlug());
+        String slug = postParam.getSlug();
+        if (null != slug) {
+            postMustNotExist(slug);
+        }
 
         // 待插入文章实体类
         Post post = new Post();
@@ -72,13 +74,13 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
         post.setModified(DateUtils.nowUnix());
 
         // 插入文章到文章表
-        int postId = postDAO.insert(post);
-        Assert.state(postId != 0, "文章创建失败");
+        int row = postDAO.insert(post);
+        Assert.state(row != 0, "文章创建失败");
         if (null == postParam.getTags()) {
             return;
         }
         // 创建 Tags
-        createTagsByPostId(postParam.getTags(), postId);
+        createTagsByPostId(postParam.getTags(), post.getPostId());
     }
 
     @Override

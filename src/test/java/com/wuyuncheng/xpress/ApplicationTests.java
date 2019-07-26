@@ -1,6 +1,6 @@
 package com.wuyuncheng.xpress;
 
-import com.wuyuncheng.xpress.service.MetaService;
+import com.wuyuncheng.xpress.service.PageService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class ApplicationTests {
 
     @Autowired
-    private MetaService metaService;
+    private PageService pageService;
 
     @Test
     public void contextLoads() {

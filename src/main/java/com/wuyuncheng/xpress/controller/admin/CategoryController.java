@@ -40,8 +40,9 @@ public class CategoryController {
     @ApiOperation("创建分类")
     @PostMapping("/categories")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createCategory(@Valid MetaParam metaParam) {
+    public MessageResponse createCategory(@Valid MetaParam metaParam) {
         metaService.createMeta(metaParam, MetaType.CATEGORY);
+        return MessageResponse.message("分类创建成功");
     }
 
     @ApiOperation("更新分类")

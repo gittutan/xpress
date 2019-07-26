@@ -29,11 +29,12 @@ public class AdminController {
         return adminService.auth(loginParam);
     }
 
-    @ApiOperation("创建帐号")
+    @ApiOperation("创建用户")
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createUser(@Valid UserParam userParam) {
+    public MessageResponse createUser(@Valid UserParam userParam) {
         adminService.createUser(userParam);
+        return MessageResponse.message("用户创建成功");
     }
 
     @ApiOperation("获取用户列表")

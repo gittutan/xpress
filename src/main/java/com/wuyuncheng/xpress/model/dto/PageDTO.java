@@ -2,14 +2,11 @@ package com.wuyuncheng.xpress.model.dto;
 
 import lombok.Data;
 
-import java.io.Serializable;
-
 @Data
-public class PostDTO implements Serializable {
+public class PageDTO {
 
     private String status;
     private Integer authorId;
-    private Integer categoryId;
     private String title;
     private String content;
     private String slug;

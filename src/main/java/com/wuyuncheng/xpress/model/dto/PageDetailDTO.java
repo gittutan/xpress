@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
-import java.io.Serializable;
-
 @JsonPropertyOrder({"id"})
 @Data
-public class UserDetailDTO implements Serializable {
+public class PageDetailDTO {
 
     @JsonProperty("id")
-    private Integer userId;
+    private Integer postId;
     private String username;
-    private String nickname;
-    private long postCount;
-    private long pageCount;
+    private String title;
+    private String slug;
+    private Integer modified;
+    private Integer commentsCount;
+    private String status;
 
 }
