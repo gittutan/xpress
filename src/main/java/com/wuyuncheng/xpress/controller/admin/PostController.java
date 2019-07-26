@@ -46,7 +46,7 @@ public class PostController {
     @ApiOperation("更新文章")
     @PutMapping("/posts/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MessageResponse updatePost(@Valid PostParam postParam, @PathVariable Integer id) {
+    public MessageResponse updatePost(@RequestBody @Valid PostParam postParam, @PathVariable Integer id) {
         Assert.notNull(id, "文章 ID 不能为空");
         postService.updatePost(postParam, id);
         return MessageResponse.message("文章更新成功");

@@ -63,7 +63,6 @@ public class MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaS
                     .eq("meta_id", metaId);
             relationshipService.remove(relationshipQueryWrapper);
         }
-
         // 删除 Meta 表中的数据
         int row = metaDAO.deleteById(metaId);
         Assert.state(row != 0, "删除失败");
@@ -104,6 +103,21 @@ public class MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaS
         meta.setMetaId(metaId);
         int row = metaDAO.updateById(meta);
         Assert.state(row != 0, metaType.getDescription() + "更新失败");
+    }
+
+    @Override
+    public boolean minusCountById(Integer metaId) {
+        return metaDAO.minusCountById(metaId) != 0;
+    }
+
+    @Override
+    public boolean minusCountByPostId(Integer postId) {
+        return metaDAO.minusCountByPostId(postId) != 0;
+    }
+
+    @Override
+    public boolean plusCountByName(Collection<String> metaNames) {
+        return metaDAO.plusCountByName(metaNames) != 0;
     }
 
     /**

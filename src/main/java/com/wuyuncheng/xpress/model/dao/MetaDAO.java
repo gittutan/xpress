@@ -4,6 +4,13 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wuyuncheng.xpress.model.entity.Meta;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+
 @Repository
 public interface MetaDAO extends BaseMapper<Meta> {
+
+    int minusCountById(Integer metaId);
+    int minusCountByPostId(Integer postId);
+    int plusCountByName(Collection<String> metaNames);
+
 }

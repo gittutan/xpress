@@ -17,7 +17,6 @@ public class PostDetailDTO implements Serializable {
     private String title;
     private String slug;
     private Integer modified;
-    private String password;
     private Integer commentsCount;
     private String status;
 

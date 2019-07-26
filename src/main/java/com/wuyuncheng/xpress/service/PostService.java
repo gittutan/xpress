@@ -14,6 +14,6 @@ public interface PostService extends IService<Post> {
     void deletePost(Integer postId);
     void createPost(PostParam postParam);
     PostDTO findPost(Integer postId);
-    void updatePost(PostParam postParam, Integer metaId);
+    void updatePost(PostParam postParam, Integer postId);
 
 }

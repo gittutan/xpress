@@ -12,13 +12,13 @@ import org.springframework.core.Ordered;
 public class XPressConfiguration {
 
     @Bean
-    public FilterRegistrationBean<CorsFilter> corsFilter() {
-        FilterRegistrationBean<CorsFilter> corsFilter = new FilterRegistrationBean<>();
-        corsFilter.setFilter(new CorsFilter());
-        corsFilter.setName("CorsFilter");
-        corsFilter.setOrder(Ordered.HIGHEST_PRECEDENCE + 10);
-        corsFilter.addUrlPatterns("/api/**");
-        return corsFilter;
+    public FilterRegistrationBean<CorsFilter> corsFilterRegistration() {
+        FilterRegistrationBean<CorsFilter> frb = new FilterRegistrationBean<>();
+        frb.setFilter(new CorsFilter());
+        frb.setName("CorsFilter");
+        frb.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        frb.addUrlPatterns("/api/*");
+        return frb;
     }
 
 }
