@@ -2,13 +2,13 @@ package com.wuyuncheng.xpress.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class SaveFileException extends ServiceException {
+public class FileException extends ServiceException {
 
-    public SaveFileException(String message) {
+    public FileException(String message) {
         super(message);
     }
 
-    public SaveFileException(String message, Throwable cause) {
+    public FileException(String message, Throwable cause) {
         super(message, cause);
     }
 
