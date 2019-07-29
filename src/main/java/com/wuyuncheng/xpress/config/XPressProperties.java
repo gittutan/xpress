@@ -24,4 +24,9 @@ public class XPressProperties {
      */
     private String jwtHeader = "Authorization";
 
+    /**
+     * File upload path.
+     */
+    private String uploadPath = "D:\\upload\\";
+
 }

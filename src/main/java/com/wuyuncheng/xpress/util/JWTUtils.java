@@ -32,12 +32,12 @@ public class JWTUtils {
     private JWTUtils() {
     }
 
-    public static String generateToken(String subject) {
+    public static String generateToken(Integer userId, String username) {
         long jwtTimeoutSeconds = Duration.ofMinutes(properties.getJwtTimeout()).getSeconds();
         Date jwtTimeoutDate = DateUtils.toDate(DateUtils.nowUnix() + jwtTimeoutSeconds);
         return Jwts.builder()
-                .setId(UUID.randomUUID().toString()) // token ID
-                .setSubject(subject) // 主题为 username
+                .setId(String.valueOf(userId)) // token ID
+                .setSubject(username) // 主题为 username
                 .setExpiration(jwtTimeoutDate) // token 过期时间
                 .signWith(SignatureAlgorithm.HS256, properties.getJwtSecret())
                 .compact();

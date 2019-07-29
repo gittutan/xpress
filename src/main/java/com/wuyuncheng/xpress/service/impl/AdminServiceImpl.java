@@ -45,7 +45,7 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
         if (null == user || !(passwordMD5.equals(user.getPassword()))) {
             throw new AuthException("用户名或密码错误");
         }
-        return createToken(user.getUsername());
+        return createToken(user.getUserId(), user.getUsername());
     }
 
     @Override
@@ -134,8 +134,8 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
         }
     }
 
-    private AuthToken createToken(String username) {
-        String token = JWTUtils.generateToken(username);
+    private AuthToken createToken(Integer userId, String username) {
+        String token = JWTUtils.generateToken(userId, username);
         return new AuthToken(token);
     }
 
