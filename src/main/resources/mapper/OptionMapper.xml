@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuyuncheng.xpress.model.dao.OptionDAO">
+
+    <select id="selectOptions" resultType="Map">
+        SELECT * FROM `option`
+    </select>
+
+    <update id="updateOptions">
+        UPDATE `option`
+        SET `value` = #{value}
+        WHERE `key` = #{key}
+    </update>
+
+</mapper>
