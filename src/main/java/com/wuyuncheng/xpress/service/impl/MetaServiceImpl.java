@@ -24,7 +24,8 @@ import org.springframework.util.Assert;
 import java.util.*;
 
 @Service
-public class MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
+public class
+MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
 
     @Autowired
     private MetaDAO metaDAO;

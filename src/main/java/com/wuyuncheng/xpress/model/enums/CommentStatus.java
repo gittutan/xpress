@@ -7,7 +7,7 @@ public enum  CommentStatus implements BaseEnum<String> {
     /**
      * 已通过
      */
-    APPROVED("approved", "已通过"),
+    APPROVE("approve", "已通过"),
 
     /**
      * 待审核

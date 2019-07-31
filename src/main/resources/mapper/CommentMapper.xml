@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuyuncheng.xpress.model.dao.CommentDAO">
+
+    <select id="selectCommentDetail" resultType="CommentDetailDTO">
+        SELECT comment.comment_id, comment.post_id, post.slug AS post_slug, comment.status, comment.author, comment.mail, comment.url, comment.content, comment.ip, comment.useragent, comment.created
+        FROM comment
+        INNER JOIN post
+        ON comment.post_id = post.post_id
+    </select>
+
+</mapper>

@@ -1,16 +1,15 @@
-package com.wuyuncheng.xpress.model.entity;
+package com.wuyuncheng.xpress.model.dto;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class Comment implements Serializable {
+public class CommentDetailDTO implements Serializable {
 
-    @TableId
     private Integer commentId;
     private Integer postId;
+    private String postSlug;
     private String status;
     private String author;
     private String mail;
