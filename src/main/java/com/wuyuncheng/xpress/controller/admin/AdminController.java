@@ -24,7 +24,7 @@ public class AdminController {
     private AdminService adminService;
 
     @ApiOperation("登陆")
-    @GetMapping("/login")
+    @PostMapping("/token")
     public AuthToken login(@Valid LoginParam loginParam) {
         return adminService.auth(loginParam);
     }
