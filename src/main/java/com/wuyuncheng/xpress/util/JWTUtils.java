@@ -1,6 +1,7 @@
 package com.wuyuncheng.xpress.util;
 
 import com.wuyuncheng.xpress.config.XPressProperties;
+import com.wuyuncheng.xpress.model.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -32,12 +33,12 @@ public class JWTUtils {
     private JWTUtils() {
     }
 
-    public static String generateToken(Integer userId, String username) {
+    public static String generateToken(User user) {
         long jwtTimeoutSeconds = Duration.ofMinutes(properties.getJwtTimeout()).getSeconds();
         Date jwtTimeoutDate = DateUtils.toDate(DateUtils.nowUnix() + jwtTimeoutSeconds);
         return Jwts.builder()
-                .setId(String.valueOf(userId)) // token ID
-                .setSubject(username) // 主题为 username
+                .setId(String.valueOf(user.getUserId())) // token ID
+                .setSubject(user.getUsername()) // 主题为 username
                 .setExpiration(jwtTimeoutDate) // token 过期时间
                 .signWith(SignatureAlgorithm.HS256, properties.getJwtSecret())
                 .compact();

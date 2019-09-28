@@ -2,7 +2,6 @@ package com.wuyuncheng.xpress.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wuyuncheng.xpress.model.dto.UserDTO;
-import com.wuyuncheng.xpress.model.dto.UserDetailDTO;
 import com.wuyuncheng.xpress.model.entity.User;
 import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
@@ -12,11 +11,11 @@ import java.util.List;
 
 public interface AdminService extends IService<User> {
 
-    AuthToken auth(LoginParam loginParam);
+    AuthToken getToken(LoginParam loginParam);
     void createUser(UserParam userParam);
-    List<UserDetailDTO> listUsers();
-    void deleteUser(Integer userId);
-    UserDTO findUser(Integer userId);
+    List<UserDTO> listUsers();
+    void removeUser(Integer userId);
+    UserDTO getUser(Integer userId);
     void updateUser(UserParam userParam, Integer userId);
 
 }

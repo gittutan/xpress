@@ -1,7 +1,6 @@
 package com.wuyuncheng.xpress.controller.admin;
 
 import com.wuyuncheng.xpress.model.dto.UserDTO;
-import com.wuyuncheng.xpress.model.dto.UserDetailDTO;
 import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
 import com.wuyuncheng.xpress.model.vo.AuthToken;
@@ -25,14 +24,15 @@ public class AdminController {
 
     @ApiOperation("登陆")
     @PostMapping("/token")
-    public AuthToken login(@Valid LoginParam loginParam) {
-        return adminService.auth(loginParam);
+    @ResponseStatus(HttpStatus.CREATED)
+    public AuthToken login(@RequestBody @Valid LoginParam loginParam) {
+        return adminService.getToken(loginParam);
     }
 
     @ApiOperation("创建用户")
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponse createUser(@Valid UserParam userParam) {
+    public MessageResponse createUser(@RequestBody @Valid UserParam userParam) {
         adminService.createUser(userParam);
         return MessageResponse.message("用户创建成功");
     }
@@ -40,7 +40,7 @@ public class AdminController {
     @ApiOperation("获取用户列表")
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDetailDTO> listUsers() {
+    public List<UserDTO> listUsers() {
         return adminService.listUsers();
     }
 
@@ -49,7 +49,7 @@ public class AdminController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Integer id) {
         Assert.notNull(id, "用户 ID 不能为空");
-        adminService.deleteUser(id);
+        adminService.removeUser(id);
     }
 
     @ApiOperation("获取单个用户")
@@ -57,13 +57,13 @@ public class AdminController {
     @ResponseStatus(HttpStatus.OK)
     public UserDTO getUser(@PathVariable Integer id) {
         Assert.notNull(id, "用户 ID 不能为空");
-        return adminService.findUser(id);
+        return adminService.getUser(id);
     }
 
     @ApiOperation("更新用户")
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MessageResponse updateUser(@Valid UserParam userParam, @PathVariable Integer id) {
+    public MessageResponse updateUser(@RequestBody @Valid UserParam userParam, @PathVariable Integer id) {
         Assert.notNull(id, "用户 ID 不能为空");
         adminService.updateUser(userParam, id);
         return MessageResponse.message("用户信息更新成功");

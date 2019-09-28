@@ -22,7 +22,7 @@ public class XPressProperties {
     /**
      * JWT authorization header.
      */
-    private String jwtHeader = "Authorization";
+    private String jwtHeader = "X-Token";
 
     /**
      * File upload path.

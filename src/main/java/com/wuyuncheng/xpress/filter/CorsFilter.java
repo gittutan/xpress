@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class CorsFilter extends GenericFilterBean {
 
-    private final String ALLOW_HEADERS = HttpHeaders.AUTHORIZATION + ", " + HttpHeaders.CONTENT_TYPE;
+    private final String ALLOW_HEADERS = "X-Token" + ", " + HttpHeaders.CONTENT_TYPE;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

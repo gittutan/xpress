@@ -7,10 +7,8 @@ import com.wuyuncheng.xpress.exception.AuthException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.UserDAO;
 import com.wuyuncheng.xpress.model.dto.UserDTO;
-import com.wuyuncheng.xpress.model.dto.UserDetailDTO;
 import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.entity.User;
-import com.wuyuncheng.xpress.model.enums.PostType;
 import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
 import com.wuyuncheng.xpress.model.vo.AuthToken;
@@ -38,14 +36,14 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
     private PostService postService;
 
     @Override
-    public AuthToken auth(LoginParam loginParam) {
+    public AuthToken getToken(LoginParam loginParam) {
         String username = loginParam.getUsername();
         String passwordMD5 = DigestUtils.md5DigestAsHex(loginParam.getPassword().getBytes());
         User user = userDAO.selectOne(new QueryWrapper<User>().eq("username", username));
         if (null == user || !(passwordMD5.equals(user.getPassword()))) {
             throw new AuthException("用户名或密码错误");
         }
-        return createToken(user.getUserId(), user.getUsername());
+        return createToken(user);
     }
 
     @Override
@@ -63,15 +61,20 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
     }
 
     @Override
-    public List<UserDetailDTO> listUsers() {
+    public List<UserDTO> listUsers() {
         List<User> users = userDAO.selectList(null);
-        List<Post> posts = postService.list();
-        return convertToUserDetailDTOList(users, posts);
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for (User user : users) {
+            UserDTO userDTO = new UserDTO();
+            BeanUtils.copyProperties(user, userDTO);
+            userDTOList.add(userDTO);
+        }
+        return userDTOList;
     }
 
     @Transactional
     @Override
-    public void deleteUser(Integer userId) {
+    public void removeUser(Integer userId) {
         userMustExist(userId);
 
         // 删除该用户发布的所有文章
@@ -84,7 +87,7 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
     }
 
     @Override
-    public UserDTO findUser(Integer userId) {
+    public UserDTO getUser(Integer userId) {
         User user = userDAO.selectById(userId);
         if (null == user) {
             throw new NotFoundException("该用户不存在");
@@ -134,37 +137,9 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
         }
     }
 
-    private AuthToken createToken(Integer userId, String username) {
-        String token = JWTUtils.generateToken(userId, username);
+    private AuthToken createToken(User user) {
+        String token = JWTUtils.generateToken(user);
         return new AuthToken(token);
-    }
-
-    private List<UserDetailDTO> convertToUserDetailDTOList(List<User> users, List<Post> posts) {
-        List<UserDetailDTO> userDetailDTOList = new ArrayList<>();
-        users.stream()
-                .forEach(user -> {
-                    UserDetailDTO userDetailDTO = new UserDetailDTO();
-                    BeanUtils.copyProperties(user, userDetailDTO);
-
-                    Integer userId = userDetailDTO.getUserId();
-                    // 计算 postCount
-                    long postCount = posts.stream()
-                            .filter(post ->
-                                    post.getAuthorId().equals(userId) && post.getType().equals(PostType.POST.getValue())
-                            )
-                            .count();
-                    userDetailDTO.setPostCount(postCount);
-                    // 计算 pageCount
-                    long pageCount = posts.stream()
-                            .filter(post ->
-                                    post.getAuthorId().equals(userId) && post.getType().equals(PostType.PAGE.getValue())
-                            )
-                            .count();
-                    userDetailDTO.setPageCount(pageCount);
-
-                    userDetailDTOList.add(userDetailDTO);
-                });
-        return userDetailDTOList;
     }
 
 }

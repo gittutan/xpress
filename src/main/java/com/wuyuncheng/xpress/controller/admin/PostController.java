@@ -39,7 +39,8 @@ public class PostController {
     @ApiOperation("创建文章")
     @PostMapping("/posts")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponse createPost(@Valid PostParam postParam) {
+    public MessageResponse createPost(@RequestBody @Valid PostParam postParam) {
+        System.err.println(postParam);
         postService.createPost(postParam);
         return MessageResponse.message("文章创建成功");
     }
