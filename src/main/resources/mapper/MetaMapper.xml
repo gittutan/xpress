@@ -5,13 +5,13 @@
 
 <mapper namespace="com.wuyuncheng.xpress.model.dao.MetaDAO">
 
-    <update id="minusCountById">
+    <update id="decrementCountById">
         UPDATE meta
         SET count = count - 1
         WHERE meta_id = #{metaId}
     </update>
 
-    <update id="minusCountByPostId">
+    <update id="decrementCountByPostId">
         UPDATE relationship
         INNER JOIN meta
         ON meta.meta_id = relationship.meta_id
@@ -19,7 +19,7 @@
         WHERE relationship.post_id = #{postId}
     </update>
 
-    <update id="plusCountByName">
+    <update id="incrementCountByName">
         UPDATE meta
         SET count = count + 1
         <where>

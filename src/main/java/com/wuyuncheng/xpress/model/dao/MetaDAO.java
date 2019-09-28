@@ -9,8 +9,8 @@ import java.util.Collection;
 @Repository
 public interface MetaDAO extends BaseMapper<Meta> {
 
-    int minusCountById(Integer metaId);
-    int minusCountByPostId(Integer postId);
-    int plusCountByName(Collection<String> metaNames);
+    int decrementCountById(Integer metaId);
+    int decrementCountByPostId(Integer postId);
+    int incrementCountByName(Collection<String> metaNames);
 
 }

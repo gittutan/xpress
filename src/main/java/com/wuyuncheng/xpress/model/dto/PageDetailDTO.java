@@ -1,10 +1,8 @@
 package com.wuyuncheng.xpress.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
-@JsonPropertyOrder({"id"})
 @Data
 public class PageDetailDTO {
 

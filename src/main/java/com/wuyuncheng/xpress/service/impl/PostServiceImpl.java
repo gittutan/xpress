@@ -49,7 +49,7 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
 
         // meta 表分类 count 减1
         Integer metaId = post.getCategoryId();
-        metaService.minusCountById(metaId);
+        metaService.decrementCountById(metaId);
         // 删除 Tags
         deleteTagsByPostId(postId);
         // 删除 post 表中的文章
@@ -166,7 +166,7 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
             throw new NotFoundException("请添加已存在的标签");
         }
         // 标签 count + 1
-        metaService.plusCountByName(tags);
+        metaService.incrementCountByName(tags);
         // 在 relationship 表中添加关系
         List<Relationship> relationships = new ArrayList<>();
         for (Integer meteId : metaIds) {
@@ -183,7 +183,7 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
      */
     private void deleteTagsByPostId(Integer postId) {
         // meta 表标签 count 减1
-        metaService.minusCountByPostId(postId);
+        metaService.decrementCountByPostId(postId);
         // 删除 relationship 表中标签的关联数据
         relationshipService.remove(new QueryWrapper<Relationship>().eq("post_id", postId));
     }

@@ -6,7 +6,6 @@ import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.MetaDAO;
 import com.wuyuncheng.xpress.model.dto.MetaDTO;
-import com.wuyuncheng.xpress.model.dto.MetaDetailDTO;
 import com.wuyuncheng.xpress.model.entity.Meta;
 import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.entity.Relationship;
@@ -35,21 +34,20 @@ MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
     private PostService postService;
 
     @Override
-    public List<MetaDetailDTO> listMetas(MetaType metaType) {
+    public List<MetaDTO> listMetas(MetaType metaType) {
         List<Meta> metas = metaDAO.selectList(new QueryWrapper<Meta>().eq("type", metaType.getValue()));
-        List<MetaDetailDTO> metaDetailDTOList = new ArrayList<>();
-        metas.stream()
-                .forEach((meta) -> {
-                    MetaDetailDTO metaDetailDTO = new MetaDetailDTO();
-                    BeanUtils.copyProperties(meta, metaDetailDTO);
-                    metaDetailDTOList.add(metaDetailDTO);
-                });
-        return metaDetailDTOList;
+        List<MetaDTO> metaDTOList = new ArrayList<>();
+        for (Meta meta : metas) {
+            MetaDTO metaDTO = new MetaDTO();
+            BeanUtils.copyProperties(meta, metaDTO);
+            metaDTOList.add(metaDTO);
+        }
+        return metaDTOList;
     }
 
     @Transactional
     @Override
-    public void deleteMeta(Integer metaId, MetaType metaType) {
+    public void removeMeta(Integer metaId, MetaType metaType) {
         metaMustExist(metaId, metaType);
 
         // 如果是分类，删除该分类下的文章
@@ -82,7 +80,7 @@ MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
     }
 
     @Override
-    public MetaDTO findMeta(Integer metaId, MetaType metaType) {
+    public MetaDTO getMeta(Integer metaId, MetaType metaType) {
         QueryWrapper<Meta> queryWrapper = new QueryWrapper<Meta>()
                 .eq("meta_id", metaId)
                 .eq("type", metaType.getValue());
@@ -107,18 +105,18 @@ MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
     }
 
     @Override
-    public boolean minusCountById(Integer metaId) {
-        return metaDAO.minusCountById(metaId) != 0;
+    public boolean decrementCountById(Integer metaId) {
+        return metaDAO.decrementCountById(metaId) != 0;
     }
 
     @Override
-    public boolean minusCountByPostId(Integer postId) {
-        return metaDAO.minusCountByPostId(postId) != 0;
+    public boolean decrementCountByPostId(Integer postId) {
+        return metaDAO.decrementCountByPostId(postId) != 0;
     }
 
     @Override
-    public boolean plusCountByName(Collection<String> metaNames) {
-        return metaDAO.plusCountByName(metaNames) != 0;
+    public boolean incrementCountByName(Collection<String> metaNames) {
+        return metaDAO.incrementCountByName(metaNames) != 0;
     }
 
     /**

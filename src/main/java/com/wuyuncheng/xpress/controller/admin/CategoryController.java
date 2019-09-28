@@ -1,7 +1,6 @@
 package com.wuyuncheng.xpress.controller.admin;
 
 import com.wuyuncheng.xpress.model.dto.MetaDTO;
-import com.wuyuncheng.xpress.model.dto.MetaDetailDTO;
 import com.wuyuncheng.xpress.model.enums.MetaType;
 import com.wuyuncheng.xpress.model.param.MetaParam;
 import com.wuyuncheng.xpress.service.MetaService;
@@ -25,7 +24,7 @@ public class CategoryController {
     @ApiOperation("获取分类列表")
     @GetMapping("/categories")
     @ResponseStatus(HttpStatus.OK)
-    public List<MetaDetailDTO> listCategories() {
+    public List<MetaDTO> listCategories() {
         return metaService.listMetas(MetaType.CATEGORY);
     }
 
@@ -34,7 +33,7 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable Integer id) {
         Assert.notNull(id, "分类 ID 不能为空");
-        metaService.deleteMeta(id, MetaType.CATEGORY);
+        metaService.removeMeta(id, MetaType.CATEGORY);
     }
 
     @ApiOperation("创建分类")
@@ -59,7 +58,7 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.OK)
     public MetaDTO getCategory(@PathVariable Integer id) {
         Assert.notNull(id, "分类 ID 不能为空");
-        return metaService.findMeta(id, MetaType.CATEGORY);
+        return metaService.getMeta(id, MetaType.CATEGORY);
     }
 
 }

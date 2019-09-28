@@ -1,7 +1,6 @@
 package com.wuyuncheng.xpress.controller.admin;
 
 import com.wuyuncheng.xpress.model.dto.MetaDTO;
-import com.wuyuncheng.xpress.model.dto.MetaDetailDTO;
 import com.wuyuncheng.xpress.model.enums.MetaType;
 import com.wuyuncheng.xpress.model.param.MetaParam;
 import com.wuyuncheng.xpress.service.MetaService;
@@ -25,7 +24,7 @@ public class TagController {
     @ApiOperation("获取标签列表")
     @GetMapping("/tags")
     @ResponseStatus(HttpStatus.OK)
-    public List<MetaDetailDTO> listTags() {
+    public List<MetaDTO> listTags() {
         return metaService.listMetas(MetaType.TAG);
     }
 
