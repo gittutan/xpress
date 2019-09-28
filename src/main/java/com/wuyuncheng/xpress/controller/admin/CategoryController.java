@@ -39,7 +39,7 @@ public class CategoryController {
     @ApiOperation("创建分类")
     @PostMapping("/categories")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponse createCategory(@Valid MetaParam metaParam) {
+    public MessageResponse createCategory(@RequestBody @Valid MetaParam metaParam) {
         metaService.createMeta(metaParam, MetaType.CATEGORY);
         return MessageResponse.message("分类创建成功");
     }
@@ -47,7 +47,8 @@ public class CategoryController {
     @ApiOperation("更新分类")
     @PutMapping("/categories/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MessageResponse updateCategory(@Valid MetaParam metaParam, @PathVariable Integer id) {
+    public MessageResponse updateCategory(@RequestBody @Valid MetaParam metaParam,
+                                          @PathVariable Integer id) {
         Assert.notNull(id, "分类 ID 不能为空");
         metaService.updateMeta(metaParam, id, MetaType.CATEGORY);
         return MessageResponse.message("分类更新成功");

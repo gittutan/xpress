@@ -6,7 +6,6 @@ import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.PostDAO;
 import com.wuyuncheng.xpress.model.dto.PostDTO;
-import com.wuyuncheng.xpress.model.dto.PostDetailDTO;
 import com.wuyuncheng.xpress.model.entity.Meta;
 import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.entity.Relationship;
@@ -38,13 +37,22 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
     private RelationshipService relationshipService;
 
     @Override
-    public List<PostDetailDTO> listPosts() {
-        return postDAO.selectPostDetail();
+    public List<PostDTO> listPosts() {
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
+                .eq("type", PostType.POST.getValue());
+        List<Post> posts = postDAO.selectList(queryWrapper);
+        List<PostDTO> postDTOList = new ArrayList<>();
+        for (Post post : posts) {
+            PostDTO postDTO = new PostDTO();
+            BeanUtils.copyProperties(post, postDTO);
+            postDTOList.add(postDTO);
+        }
+        return postDTOList;
     }
 
     @Transactional
     @Override
-    public void deletePost(Integer postId) {
+    public void removePost(Integer postId) {
         Post post = postMustExist(postId);
 
         // meta 表分类 count 减1
@@ -84,7 +92,7 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
     }
 
     @Override
-    public PostDTO findPost(Integer postId) {
+    public PostDTO getPost(Integer postId) {
         QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
                 .eq("post_id", postId)
                 .eq("type", PostType.POST.getValue());

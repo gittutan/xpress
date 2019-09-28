@@ -63,7 +63,8 @@ public class AdminController {
     @ApiOperation("更新用户")
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MessageResponse updateUser(@RequestBody @Valid UserParam userParam, @PathVariable Integer id) {
+    public MessageResponse updateUser(@RequestBody @Valid UserParam userParam,
+                                      @PathVariable Integer id) {
         Assert.notNull(id, "用户 ID 不能为空");
         adminService.updateUser(userParam, id);
         return MessageResponse.message("用户信息更新成功");

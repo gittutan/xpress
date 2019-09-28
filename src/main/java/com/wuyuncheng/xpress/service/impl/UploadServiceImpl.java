@@ -4,7 +4,6 @@ import com.wuyuncheng.xpress.config.XPressProperties;
 import com.wuyuncheng.xpress.exception.FileException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.UploadDAO;
-import com.wuyuncheng.xpress.model.dto.UploadDetailDTO;
 import com.wuyuncheng.xpress.model.entity.Upload;
 import com.wuyuncheng.xpress.model.param.FileParam;
 import com.wuyuncheng.xpress.service.UploadService;
@@ -31,12 +30,12 @@ public class UploadServiceImpl implements UploadService {
     private XPressProperties properties;
 
     @Override
-    public List<UploadDetailDTO> listFiles() {
-        return uploadDAO.selectFileDetail();
+    public List<Upload> listFiles() {
+        return uploadDAO.selectList(null);
     }
 
     @Override
-    public void deleteFile(Integer uploadId) {
+    public void removeFile(Integer uploadId) {
         Upload upload = uploadDAO.selectById(uploadId);
         if (null == upload) {
             throw new NotFoundException("文件不存在");

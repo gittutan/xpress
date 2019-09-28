@@ -5,7 +5,6 @@ import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.PostDAO;
 import com.wuyuncheng.xpress.model.dto.PageDTO;
-import com.wuyuncheng.xpress.model.dto.PageDetailDTO;
 import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.enums.PostType;
 import com.wuyuncheng.xpress.model.param.PageParam;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,12 +25,21 @@ public class PageServiceImpl implements PageService {
     private PostDAO postDAO;
 
     @Override
-    public List<PageDetailDTO> listPages() {
-        return postDAO.selectPageDetail();
+    public List<PageDTO> listPages() {
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
+                .eq("type", PostType.PAGE.getValue());
+        List<Post> posts = postDAO.selectList(queryWrapper);
+        List<PageDTO> pageDTOList = new ArrayList<>();
+        for (Post post : posts) {
+            PageDTO pageDTO = new PageDTO();
+            BeanUtils.copyProperties(post, pageDTO);
+            pageDTOList.add(pageDTO);
+        }
+        return pageDTOList;
     }
 
     @Override
-    public void deletePage(Integer pageId) {
+    public void removePage(Integer pageId) {
         pageMustExist(pageId);
 
         int row = postDAO.deleteById(pageId);
@@ -55,7 +64,7 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public PageDTO findPage(Integer pageId) {
+    public PageDTO getPage(Integer pageId) {
         QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
                 .eq("post_id", pageId)
                 .eq("type", PostType.PAGE.getValue());

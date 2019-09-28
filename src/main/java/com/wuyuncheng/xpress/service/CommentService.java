@@ -1,13 +1,13 @@
 package com.wuyuncheng.xpress.service;
 
-import com.wuyuncheng.xpress.model.dto.CommentDetailDTO;
+import com.wuyuncheng.xpress.model.entity.Comment;
 
 import java.util.List;
 
 public interface CommentService {
 
-    List<CommentDetailDTO> listComments();
-    void deleteComment(Integer id);
+    List<Comment> listComments();
+    void removeComment(Integer id);
     void reviewComment(Integer id);
 
 }

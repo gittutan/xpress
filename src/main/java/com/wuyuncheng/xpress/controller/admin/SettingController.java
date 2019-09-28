@@ -26,9 +26,9 @@ public class SettingController {
     }
 
     @ApiOperation("更新设置")
-    @PutMapping("/settings")
+    @PostMapping("/settings")
     @ResponseStatus(HttpStatus.OK)
-    public MessageResponse updateSettings(@Valid SettingParam settingParam) {
+    public MessageResponse updateSettings(@RequestBody @Valid SettingParam settingParam) {
         settingService.updateSettings(settingParam);
         return MessageResponse.message("分类更新成功");
     }

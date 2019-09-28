@@ -2,7 +2,7 @@ package com.wuyuncheng.xpress.service.impl;
 
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.CommentDAO;
-import com.wuyuncheng.xpress.model.dto.CommentDetailDTO;
+import com.wuyuncheng.xpress.model.dto.CommentDTO;
 import com.wuyuncheng.xpress.model.entity.Comment;
 import com.wuyuncheng.xpress.model.enums.CommentStatus;
 import com.wuyuncheng.xpress.service.CommentService;
@@ -19,12 +19,12 @@ public class CommentServiceImpl implements CommentService {
     private CommentDAO commentDAO;
 
     @Override
-    public List<CommentDetailDTO> listComments() {
-        return commentDAO.selectCommentDetail();
+    public List<Comment> listComments() {
+        return commentDAO.selectList(null);
     }
 
     @Override
-    public void deleteComment(Integer id) {
+    public void removeComment(Integer id) {
         commentMustExist(id);
 
         int row = commentDAO.deleteById(id);

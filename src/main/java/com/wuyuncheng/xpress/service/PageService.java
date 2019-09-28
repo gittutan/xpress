@@ -1,17 +1,16 @@
 package com.wuyuncheng.xpress.service;
 
 import com.wuyuncheng.xpress.model.dto.PageDTO;
-import com.wuyuncheng.xpress.model.dto.PageDetailDTO;
 import com.wuyuncheng.xpress.model.param.PageParam;
 
 import java.util.List;
 
 public interface PageService {
 
-    List<PageDetailDTO> listPages();
-    void deletePage(Integer pageId);
+    List<PageDTO> listPages();
+    void removePage(Integer pageId);
     void createPage(PageParam pageParam);
-    PageDTO findPage(Integer pageId);
+    PageDTO getPage(Integer pageId);
     void updatePage(PageParam pageParam, Integer pageId);
 
 }

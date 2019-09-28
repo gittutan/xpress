@@ -1,6 +1,6 @@
 package com.wuyuncheng.xpress.controller.admin;
 
-import com.wuyuncheng.xpress.model.dto.CommentDetailDTO;
+import com.wuyuncheng.xpress.model.entity.Comment;
 import com.wuyuncheng.xpress.service.CommentService;
 import com.wuyuncheng.xpress.util.MessageResponse;
 import io.swagger.annotations.ApiOperation;
@@ -21,16 +21,16 @@ public class CommentController {
     @ApiOperation("获取评论列表")
     @GetMapping("/comments")
     @ResponseStatus(HttpStatus.OK)
-    public List<CommentDetailDTO> listComments() {
+    public List<Comment> listComments() {
         return commentService.listComments();
     }
 
     @ApiOperation("删除评论")
     @DeleteMapping("/comments/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteComment(@PathVariable Integer id) {
+    public void removeComment(@PathVariable Integer id) {
         Assert.notNull(id, "评论 ID 不能为空");
-        commentService.deleteComment(id);
+        commentService.removeComment(id);
     }
 
     @ApiOperation("设置评论通过审核")

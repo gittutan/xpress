@@ -39,7 +39,7 @@ public class TagController {
     @ApiOperation("创建标签")
     @PostMapping("/tags")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponse createTag(@Valid MetaParam metaParam) {
+    public MessageResponse createTag(@RequestBody @Valid MetaParam metaParam) {
         metaService.createMeta(metaParam, MetaType.TAG);
         return MessageResponse.message("标签创建成功");
     }
@@ -47,7 +47,8 @@ public class TagController {
     @ApiOperation("更新标签")
     @PutMapping("/tags/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MessageResponse updateTag(@Valid MetaParam metaParam, @PathVariable Integer id) {
+    public MessageResponse updateTag(@RequestBody @Valid MetaParam metaParam,
+                                     @PathVariable Integer id) {
         Assert.notNull(id, "标签 ID 不能为空");
         metaService.updateMeta(metaParam, id, MetaType.TAG);
         return MessageResponse.message("标签更新成功");

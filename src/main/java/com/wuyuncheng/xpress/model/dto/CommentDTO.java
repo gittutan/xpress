@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class CommentDetailDTO implements Serializable {
+public class CommentDTO implements Serializable {
 
     private Integer commentId;
     private Integer postId;

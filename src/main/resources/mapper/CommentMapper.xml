@@ -5,11 +5,11 @@
 
 <mapper namespace="com.wuyuncheng.xpress.model.dao.CommentDAO">
 
-    <select id="selectCommentDetail" resultType="CommentDetailDTO">
-        SELECT comment.comment_id, comment.post_id, post.slug AS post_slug, comment.status, comment.author, comment.mail, comment.url, comment.content, comment.ip, comment.useragent, comment.created
-        FROM comment
-        INNER JOIN post
-        ON comment.post_id = post.post_id
-    </select>
+<!--    <select id="selectCommentDetail" resultType="CommentDetailDTO">-->
+<!--        SELECT comment.comment_id, comment.post_id, post.slug AS post_slug, comment.status, comment.author, comment.mail, comment.url, comment.content, comment.ip, comment.useragent, comment.created-->
+<!--        FROM comment-->
+<!--        INNER JOIN post-->
+<!--        ON comment.post_id = post.post_id-->
+<!--    </select>-->
 
 </mapper>

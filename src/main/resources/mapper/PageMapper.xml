@@ -5,11 +5,11 @@
 
 <mapper namespace="com.wuyuncheng.xpress.model.dao.PostDAO">
 
-    <select id="selectPageDetail" resultType="PageDetailDTO">
-        SELECT post.post_id, user.username, post.title, post.slug, post.modified, post.comments_count, post.status
-        FROM post
-        INNER JOIN user ON post.author_id = user.user_id
-        WHERE post.type = 'page'
-    </select>
+<!--    <select id="selectPageDetail" resultType="PageDetailDTO">-->
+<!--        SELECT post.post_id, user.username, post.title, post.slug, post.modified, post.comments_count, post.status-->
+<!--        FROM post-->
+<!--        INNER JOIN user ON post.author_id = user.user_id-->
+<!--        WHERE post.type = 'page'-->
+<!--    </select>-->
 
 </mapper>

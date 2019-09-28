@@ -1,6 +1,5 @@
 package com.wuyuncheng.xpress.controller.admin;
 
-import com.wuyuncheng.xpress.model.dto.UploadDetailDTO;
 import com.wuyuncheng.xpress.model.entity.Upload;
 import com.wuyuncheng.xpress.model.param.FileParam;
 import com.wuyuncheng.xpress.service.UploadService;
@@ -23,22 +22,22 @@ public class UploadController {
     @ApiOperation("获取文件列表")
     @GetMapping("/files")
     @ResponseStatus(HttpStatus.OK)
-    public List<UploadDetailDTO> listPosts() {
+    public List<Upload> listFiles() {
         return uploadService.listFiles();
     }
 
     @ApiOperation("删除文件")
     @DeleteMapping("/files/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePost(@PathVariable Integer id) {
+    public void removeFile(@PathVariable Integer id) {
         Assert.notNull(id, "文件 ID 不能为空");
-        uploadService.deleteFile(id);
+        uploadService.removeFile(id);
     }
 
     @ApiOperation("创建文件")
     @PostMapping("/files")
     @ResponseStatus(HttpStatus.CREATED)
-    public Upload createPost(@Valid FileParam fileParam) {
+    public Upload createFile(@RequestBody @Valid FileParam fileParam) {
         return uploadService.createFile(fileParam);
     }
 
