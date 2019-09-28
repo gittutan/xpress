@@ -31,9 +31,9 @@ public class TagController {
     @ApiOperation("删除标签")
     @DeleteMapping("/tags/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTag(@PathVariable Integer id) {
+    public void removeTag(@PathVariable Integer id) {
         Assert.notNull(id, "标签 ID 不能为空");
-        metaService.deleteMeta(id, MetaType.TAG);
+        metaService.removeMeta(id, MetaType.TAG);
     }
 
     @ApiOperation("创建标签")
@@ -58,7 +58,7 @@ public class TagController {
     @ResponseStatus(HttpStatus.OK)
     public MetaDTO getTag(@PathVariable Integer id) {
         Assert.notNull(id, "标签 ID 不能为空");
-        return metaService.findMeta(id, MetaType.TAG);
+        return metaService.getMeta(id, MetaType.TAG);
     }
 
 }

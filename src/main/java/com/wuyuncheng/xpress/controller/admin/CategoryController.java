@@ -31,7 +31,7 @@ public class CategoryController {
     @ApiOperation("删除分类")
     @DeleteMapping("/categories/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategory(@PathVariable Integer id) {
+    public void removeCategory(@PathVariable Integer id) {
         Assert.notNull(id, "分类 ID 不能为空");
         metaService.removeMeta(id, MetaType.CATEGORY);
     }

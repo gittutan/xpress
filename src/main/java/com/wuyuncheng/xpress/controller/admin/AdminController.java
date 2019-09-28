@@ -47,7 +47,7 @@ public class AdminController {
     @ApiOperation("删除用户")
     @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable Integer id) {
+    public void removeUser(@PathVariable Integer id) {
         Assert.notNull(id, "用户 ID 不能为空");
         adminService.removeUser(id);
     }
