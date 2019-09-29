@@ -1,9 +1,13 @@
 package com.wuyuncheng.xpress.model.param;
 
+import com.wuyuncheng.xpress.model.entity.Post;
+import com.wuyuncheng.xpress.model.enums.PostType;
 import com.wuyuncheng.xpress.model.enums.annotation.ValidateString;
+import com.wuyuncheng.xpress.util.DateUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
@@ -48,5 +52,13 @@ public class PostParam {
 
     @ApiModelProperty("文章标签")
     private Set<String> tags;
+
+    public Post convertTo() {
+        Post post = new Post();
+        BeanUtils.copyProperties(this, post);
+        post.setType(PostType.POST.getValue());
+        post.setModified(DateUtils.nowUnix());
+        return post;
+    }
 
 }

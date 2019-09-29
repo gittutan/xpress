@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.util.Date;
-import java.util.UUID;
 
 @Component
 public class JWTUtils {

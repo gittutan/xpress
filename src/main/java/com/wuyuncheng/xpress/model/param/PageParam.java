@@ -1,9 +1,13 @@
 package com.wuyuncheng.xpress.model.param;
 
+import com.wuyuncheng.xpress.model.entity.Post;
+import com.wuyuncheng.xpress.model.enums.PostType;
 import com.wuyuncheng.xpress.model.enums.annotation.ValidateString;
+import com.wuyuncheng.xpress.util.DateUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
@@ -40,5 +44,13 @@ public class PageParam {
     @ApiModelProperty("是否允许评论")
     @NotNull(message = "是否允许评论不能为空")
     private Boolean isAllowComments;
+
+    public Post convertTo() {
+        Post page = new Post();
+        BeanUtils.copyProperties(this, page);
+        page.setType(PostType.PAGE.getValue());
+        page.setModified(DateUtils.nowUnix());
+        return page;
+    }
 
 }

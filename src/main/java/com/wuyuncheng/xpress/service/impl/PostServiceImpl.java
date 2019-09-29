@@ -16,7 +16,6 @@ import com.wuyuncheng.xpress.service.MetaService;
 import com.wuyuncheng.xpress.service.PostService;
 import com.wuyuncheng.xpress.service.RelationshipService;
 import com.wuyuncheng.xpress.util.DateUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,13 +37,13 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
 
     @Override
     public List<PostDTO> listPosts() {
-        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
-                .eq("type", PostType.POST.getValue());
-        List<Post> posts = postDAO.selectList(queryWrapper);
+        List<Post> posts = postDAO.selectList(
+                new QueryWrapper<Post>()
+                        .eq("type", PostType.POST.getValue())
+        );
         List<PostDTO> postDTOList = new ArrayList<>();
         for (Post post : posts) {
-            PostDTO postDTO = new PostDTO();
-            BeanUtils.copyProperties(post, postDTO);
+            PostDTO postDTO = PostDTO.convertFrom(post);
             postDTOList.add(postDTO);
         }
         return postDTOList;
@@ -74,12 +73,9 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
         }
 
         // 待插入文章实体类
-        Post post = new Post();
-        BeanUtils.copyProperties(postParam, post);
-        post.setType(PostType.POST.getValue());
+        Post post = postParam.convertTo();
         post.setCommentsCount(0);
         post.setCreated(DateUtils.nowUnix());
-        post.setModified(DateUtils.nowUnix());
 
         // 插入文章到文章表
         int row = postDAO.insert(post);
@@ -93,15 +89,15 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
 
     @Override
     public PostDTO getPost(Integer postId) {
-        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
-                .eq("post_id", postId)
-                .eq("type", PostType.POST.getValue());
-        Post post = postDAO.selectOne(queryWrapper);
+        Post post = postDAO.selectOne(
+                new QueryWrapper<Post>()
+                        .eq("post_id", postId)
+                        .eq("type", PostType.POST.getValue())
+        );
         if (null == post) {
             throw new NotFoundException("文章未找到");
         }
-        PostDTO postDTO = new PostDTO();
-        BeanUtils.copyProperties(post, postDTO);
+        PostDTO postDTO = PostDTO.convertFrom(post);
         return postDTO;
     }
 
@@ -110,10 +106,8 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
         postMustExist(postId);
 
         // 更新文章
-        Post post = new Post();
-        BeanUtils.copyProperties(postParam, post);
+        Post post = postParam.convertTo();
         post.setPostId(postId);
-        post.setModified(DateUtils.nowUnix());
         postDAO.updateById(post);
 
         /**
@@ -128,10 +122,11 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
      * 文章不存在时抛出异常
      */
     private Post postMustExist(Integer postId) {
-        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
-                .eq("post_id", postId)
-                .eq("type", PostType.POST.getValue());
-        Post post = postDAO.selectOne(queryWrapper);
+        Post post = postDAO.selectOne(
+                new QueryWrapper<Post>()
+                        .eq("post_id", postId)
+                        .eq("type", PostType.POST.getValue())
+        );
         if (null == post) {
             throw new NotFoundException("文章不存在");
         }
@@ -142,9 +137,10 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
      * 文章存在时抛出异常
      */
     private void postMustNotExist(String postSlug) {
-        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
-                .eq("slug", postSlug);
-        Integer count = postDAO.selectCount(queryWrapper);
+        Integer count = postDAO.selectCount(
+                new QueryWrapper<Post>()
+                        .eq("slug", postSlug)
+        );
         if (count != 0) {
             throw new AlreadyExistsException("文章已存在");
         }
@@ -159,7 +155,10 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
          * 重复抛出异常
          * 不重复记录标签 ID
          */
-        List<Meta> metas = metaService.list(new QueryWrapper<Meta>().eq("type", MetaType.TAG.getValue()));
+        List<Meta> metas = metaService.list(
+                new QueryWrapper<Meta>()
+                        .eq("type", MetaType.TAG.getValue())
+        );
         List<Integer> metaIds = new ArrayList<>();
         metas.stream()
                 .forEach(meta -> {
@@ -190,10 +189,13 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
      * 根据文章 ID 删除 Tags
      */
     private void deleteTagsByPostId(Integer postId) {
-        // meta 表标签 count 减1
+        // meta 表标签 count 减 1
         metaService.decrementCountByPostId(postId);
         // 删除 relationship 表中标签的关联数据
-        relationshipService.remove(new QueryWrapper<Relationship>().eq("post_id", postId));
+        relationshipService.remove(
+                new QueryWrapper<Relationship>()
+                        .eq("post_id", postId)
+        );
     }
 
 }

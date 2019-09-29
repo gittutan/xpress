@@ -2,7 +2,6 @@ package com.wuyuncheng.xpress.service.impl;
 
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.CommentDAO;
-import com.wuyuncheng.xpress.model.dto.CommentDTO;
 import com.wuyuncheng.xpress.model.entity.Comment;
 import com.wuyuncheng.xpress.model.enums.CommentStatus;
 import com.wuyuncheng.xpress.service.CommentService;

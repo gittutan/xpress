@@ -6,21 +6,21 @@
 <mapper namespace="com.wuyuncheng.xpress.model.dao.MetaDAO">
 
     <update id="decrementCountById">
-        UPDATE meta
+        UPDATE `meta`
         SET count = count - 1
         WHERE meta_id = #{metaId}
     </update>
 
     <update id="decrementCountByPostId">
-        UPDATE relationship
-        INNER JOIN meta
+        UPDATE `relationship`
+        INNER JOIN `meta`
         ON meta.meta_id = relationship.meta_id
         SET meta.count = meta.count - 1
         WHERE relationship.post_id = #{postId}
     </update>
 
     <update id="incrementCountByName">
-        UPDATE meta
+        UPDATE `meta`
         SET count = count + 1
         <where>
             <if test="null != collection and collection.size() > 0">
@@ -31,5 +31,19 @@
             </if>
         </where>
     </update>
+
+    <select id="selectTagsByIds" resultType="Meta">
+        SELECT * FROM `meta`
+        <where>
+            type = "tag"
+            <if test="null != collection and collection.size() > 0">
+                and meta_id IN
+                <foreach collection="collection" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+
+    </select>
 
 </mapper>

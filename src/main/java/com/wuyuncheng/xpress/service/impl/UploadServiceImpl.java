@@ -7,7 +7,6 @@ import com.wuyuncheng.xpress.model.dao.UploadDAO;
 import com.wuyuncheng.xpress.model.entity.Upload;
 import com.wuyuncheng.xpress.model.param.FileParam;
 import com.wuyuncheng.xpress.service.UploadService;
-import com.wuyuncheng.xpress.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,14 +53,8 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public Upload createFile(FileParam fileParam) {
         MultipartFile file = fileParam.getFile();
-        String filename = DateUtils.nowUnix() + file.getOriginalFilename();
         // 插入数据库
-        Upload upload = new Upload();
-        upload.setAuthorId(fileParam.getAuthorId());
-        upload.setFilename(filename);
-        upload.setMimetype(file.getContentType());
-        upload.setSize(file.getSize());
-        upload.setCreated(DateUtils.nowUnix());
+        Upload upload = fileParam.convertTo();
         uploadDAO.insert(upload);
         // 写出文件
         if (file.isEmpty()) {
@@ -73,7 +66,7 @@ public class UploadServiceImpl implements UploadService {
                 uploadPath.mkdir();
             }
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(properties.getUploadPath() + filename);
+            Path path = Paths.get(properties.getUploadPath() + upload.getFilename());
             Files.write(path, bytes);
         } catch (IOException e) {
             throw new FileException("文件写入失败");

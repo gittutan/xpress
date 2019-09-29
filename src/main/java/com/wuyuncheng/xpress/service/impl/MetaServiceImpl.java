@@ -14,7 +14,6 @@ import com.wuyuncheng.xpress.model.param.MetaParam;
 import com.wuyuncheng.xpress.service.MetaService;
 import com.wuyuncheng.xpress.service.PostService;
 import com.wuyuncheng.xpress.service.RelationshipService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +22,7 @@ import org.springframework.util.Assert;
 import java.util.*;
 
 @Service
-public class
-MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
+public class MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
 
     @Autowired
     private MetaDAO metaDAO;
@@ -35,14 +33,16 @@ MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
 
     @Override
     public List<MetaDTO> listMetas(MetaType metaType) {
-        List<Meta> metas = metaDAO.selectList(new QueryWrapper<Meta>().eq("type", metaType.getValue()));
-        List<MetaDTO> metaDTOList = new ArrayList<>();
-        for (Meta meta : metas) {
-            MetaDTO metaDTO = new MetaDTO();
-            BeanUtils.copyProperties(meta, metaDTO);
-            metaDTOList.add(metaDTO);
-        }
-        return metaDTOList;
+        List<Meta> metas = metaDAO.selectList(
+                new QueryWrapper<Meta>().eq("type", metaType.getValue())
+        );
+        return convertToMetaDTOList(metas);
+    }
+
+    @Override
+    public List<MetaDTO> listTagsByIds(List<Integer> ids) {
+        List<Meta> tags = metaDAO.selectTagsByIds(ids);
+        return convertToMetaDTOList(tags);
     }
 
     @Transactional
@@ -52,15 +52,17 @@ MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
 
         // 如果是分类，删除该分类下的文章
         if (metaType.getValue().equals(MetaType.CATEGORY.getValue())) {
-            QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
-                    .eq("category_id", metaId);
-            postService.remove(queryWrapper);
+            postService.remove(
+                    new QueryWrapper<Post>()
+                            .eq("category_id", metaId)
+            );
         }
         // 如果是标签，删除 Relationship 表对应的数据
         if (metaType.getValue().equals(MetaType.TAG.getValue())) {
-            QueryWrapper<Relationship> relationshipQueryWrapper = new QueryWrapper<Relationship>()
-                    .eq("meta_id", metaId);
-            relationshipService.remove(relationshipQueryWrapper);
+            relationshipService.remove(
+                    new QueryWrapper<Relationship>()
+                            .eq("meta_id", metaId)
+            );
         }
         // 删除 Meta 表中的数据
         int row = metaDAO.deleteById(metaId);
@@ -71,8 +73,7 @@ MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
     public void createMeta(MetaParam metaParam, MetaType metaType) {
         metaMustNotExist(metaParam.getName(), metaParam.getSlug());
 
-        Meta meta = new Meta();
-        BeanUtils.copyProperties(metaParam, meta);
+        Meta meta = metaParam.convertTo();
         meta.setType(metaType.getValue());
         meta.setCount(0);
         int row = metaDAO.insert(meta);
@@ -81,24 +82,22 @@ MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
 
     @Override
     public MetaDTO getMeta(Integer metaId, MetaType metaType) {
-        QueryWrapper<Meta> queryWrapper = new QueryWrapper<Meta>()
-                .eq("meta_id", metaId)
-                .eq("type", metaType.getValue());
-        Meta meta = metaDAO.selectOne(queryWrapper);
+        Meta meta = metaDAO.selectOne(
+                new QueryWrapper<Meta>()
+                        .eq("meta_id", metaId)
+                        .eq("type", metaType.getValue())
+        );
         if (null == meta) {
             throw new NotFoundException(metaType.getDescription() + "不存在");
         }
-        MetaDTO metaDTO = new MetaDTO();
-        BeanUtils.copyProperties(meta, metaDTO);
-        return metaDTO;
+        return MetaDTO.convertFrom(meta);
     }
 
     @Override
     public void updateMeta(MetaParam metaParam, Integer metaId, MetaType metaType) {
         metaMustExist(metaId, metaType);
 
-        Meta meta = new Meta();
-        BeanUtils.copyProperties(metaParam, meta);
+        Meta meta = metaParam.convertTo();
         meta.setMetaId(metaId);
         int row = metaDAO.updateById(meta);
         Assert.state(row != 0, metaType.getDescription() + "更新失败");
@@ -117,6 +116,15 @@ MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaService {
     @Override
     public boolean incrementCountByName(Collection<String> metaNames) {
         return metaDAO.incrementCountByName(metaNames) != 0;
+    }
+
+    private List<MetaDTO> convertToMetaDTOList(Collection<Meta> metas) {
+        List<MetaDTO> metaDTOList = new ArrayList<>();
+        for (Meta meta : metas) {
+            MetaDTO metaDTO = MetaDTO.convertFrom(meta);
+            metaDTOList.add(metaDTO);
+        }
+        return metaDTOList;
     }
 
     /**

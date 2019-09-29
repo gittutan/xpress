@@ -26,13 +26,13 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public List<PageDTO> listPages() {
-        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
-                .eq("type", PostType.PAGE.getValue());
-        List<Post> posts = postDAO.selectList(queryWrapper);
+        List<Post> posts = postDAO.selectList(
+                new QueryWrapper<Post>()
+                        .eq("type", PostType.PAGE.getValue())
+        );
         List<PageDTO> pageDTOList = new ArrayList<>();
         for (Post post : posts) {
-            PageDTO pageDTO = new PageDTO();
-            BeanUtils.copyProperties(post, pageDTO);
+            PageDTO pageDTO = PageDTO.convertFrom(post);
             pageDTOList.add(pageDTO);
         }
         return pageDTOList;
@@ -53,27 +53,24 @@ public class PageServiceImpl implements PageService {
             pageMustNotExist(slug);
         }
 
-        Post page = new Post();
-        BeanUtils.copyProperties(pageParam, page);
-        page.setType(PostType.PAGE.getValue());
+        Post page = pageParam.convertTo();
         page.setCommentsCount(0);
         page.setCreated(DateUtils.nowUnix());
-        page.setModified(DateUtils.nowUnix());
         int row = postDAO.insert(page);
         Assert.state(row != 0, "页面创建失败");
     }
 
     @Override
     public PageDTO getPage(Integer pageId) {
-        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
-                .eq("post_id", pageId)
-                .eq("type", PostType.PAGE.getValue());
-        Post page = postDAO.selectOne(queryWrapper);
+        Post page = postDAO.selectOne(
+                new QueryWrapper<Post>()
+                        .eq("post_id", pageId)
+                        .eq("type", PostType.PAGE.getValue())
+        );
         if (null == page) {
             throw new NotFoundException("页面未找到");
         }
-        PageDTO pageDTO = new PageDTO();
-        BeanUtils.copyProperties(page, pageDTO);
+        PageDTO pageDTO = PageDTO.convertFrom(page);
         return pageDTO;
     }
 
@@ -81,10 +78,8 @@ public class PageServiceImpl implements PageService {
     public void updatePage(PageParam pageParam, Integer pageId) {
         pageMustExist(pageId);
 
-        Post page = new Post();
-        BeanUtils.copyProperties(pageParam, page);
+        Post page = pageParam.convertTo();
         page.setPostId(pageId);
-        page.setModified(DateUtils.nowUnix());
         postDAO.updateById(page);
     }
 
@@ -92,10 +87,11 @@ public class PageServiceImpl implements PageService {
      * 页面不存在时抛出异常
      */
     private Post pageMustExist(Integer pageId) {
-        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
-                .eq("post_id", pageId)
-                .eq("type", PostType.PAGE.getValue());
-        Post page = postDAO.selectOne(queryWrapper);
+        Post page = postDAO.selectOne(
+                new QueryWrapper<Post>()
+                        .eq("post_id", pageId)
+                        .eq("type", PostType.PAGE.getValue())
+        );
         if (null == page) {
             throw new NotFoundException("页面不存在");
         }
@@ -106,9 +102,10 @@ public class PageServiceImpl implements PageService {
      * 页面存在时抛出异常
      */
     private void pageMustNotExist(String pageSlug) {
-        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
-                .eq("slug", pageSlug);
-        Integer count = postDAO.selectCount(queryWrapper);
+        Integer count = postDAO.selectCount(
+                new QueryWrapper<Post>()
+                        .eq("slug", pageSlug)
+        );
         if (count != 0) {
             throw new AlreadyExistsException("页面已存在");
         }

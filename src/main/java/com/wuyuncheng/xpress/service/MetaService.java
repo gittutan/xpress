@@ -12,6 +12,7 @@ import java.util.List;
 public interface MetaService extends IService<Meta> {
 
     List<MetaDTO> listMetas(MetaType metaType);
+    List<MetaDTO> listTagsByIds(List<Integer> ids);
     void removeMeta(Integer metaId, MetaType metaType);
     void createMeta(MetaParam metaParam, MetaType metaType);
     MetaDTO getMeta(Integer metaId, MetaType metaType);

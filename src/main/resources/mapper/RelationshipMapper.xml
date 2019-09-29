@@ -5,6 +5,12 @@
 
 <mapper namespace="com.wuyuncheng.xpress.model.dao.RelationshipDAO">
 
+        <select id="selectTagIdsByPostId" resultType="Integer">
+            SELECT meta_id
+            FROM `relationship`
+            WHERE post_id = #{postId}
+        </select>
+
     <!--<delete id="deleteByPostIds">-->
         <!--DELETE FROM relationship-->
         <!--<where>-->

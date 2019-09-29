@@ -1,8 +1,12 @@
 package com.wuyuncheng.xpress.model.param;
 
+import com.wuyuncheng.xpress.model.entity.User;
+import com.wuyuncheng.xpress.util.DateUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.DigestUtils;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -38,5 +42,15 @@ public class UserParam {
     @NotBlank(message = "昵称不能为空")
     @Size(max = 50, message = "用户昵称长度不能超过 {max}")
     private String nickname;
+
+    public User convertTo() {
+        User user = new User();
+        BeanUtils.copyProperties(this, user);
+        user.setCreated(DateUtils.nowUnix());
+        String password = user.getPassword();
+        String passwordMD5 = DigestUtils.md5DigestAsHex(password.getBytes());
+        user.setPassword(passwordMD5);
+        return user;
+    }
 
 }

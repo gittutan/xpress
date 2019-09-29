@@ -14,9 +14,7 @@ import com.wuyuncheng.xpress.model.param.UserParam;
 import com.wuyuncheng.xpress.model.vo.AuthToken;
 import com.wuyuncheng.xpress.service.AdminService;
 import com.wuyuncheng.xpress.service.PostService;
-import com.wuyuncheng.xpress.util.DateUtils;
 import com.wuyuncheng.xpress.util.JWTUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +37,9 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
     public AuthToken getToken(LoginParam loginParam) {
         String username = loginParam.getUsername();
         String passwordMD5 = DigestUtils.md5DigestAsHex(loginParam.getPassword().getBytes());
-        User user = userDAO.selectOne(new QueryWrapper<User>().eq("username", username));
+        User user = userDAO.selectOne(
+                new QueryWrapper<User>().eq("username", username)
+        );
         if (null == user || !(passwordMD5.equals(user.getPassword()))) {
             throw new AuthException("用户名或密码错误");
         }
@@ -50,12 +50,7 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
     public void createUser(UserParam userParam) {
         userMustNotExist(userParam.getUsername());
 
-        User user = new User();
-        BeanUtils.copyProperties(userParam, user);
-        user.setCreated(DateUtils.nowUnix());
-        String password = user.getPassword();
-        String passwordMD5 = DigestUtils.md5DigestAsHex(password.getBytes());
-        user.setPassword(passwordMD5);
+        User user = userParam.convertTo();
         int row = userDAO.insert(user);
         Assert.state(row != 0, "用户创建失败");
     }
@@ -65,8 +60,7 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
         List<User> users = userDAO.selectList(null);
         List<UserDTO> userDTOList = new ArrayList<>();
         for (User user : users) {
-            UserDTO userDTO = new UserDTO();
-            BeanUtils.copyProperties(user, userDTO);
+            UserDTO userDTO = UserDTO.convertFrom(user);
             userDTOList.add(userDTO);
         }
         return userDTOList;
@@ -78,9 +72,10 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
         userMustExist(userId);
 
         // 删除该用户发布的所有文章
-        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
-                .eq("author_id", userId);
-        postService.remove(queryWrapper);
+        postService.remove(
+                new QueryWrapper<Post>()
+                        .eq("author_id", userId)
+        );
 
         int row = userDAO.deleteById(userId);
         Assert.state(row != 0, "用户删除失败");
@@ -92,20 +87,14 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
         if (null == user) {
             throw new NotFoundException("该用户不存在");
         }
-        UserDTO userDTO = new UserDTO();
-        BeanUtils.copyProperties(user, userDTO);
-        return userDTO;
+        return UserDTO.convertFrom(user);
     }
 
     @Override
     public void updateUser(UserParam userParam, Integer userId) {
         userMustExist(userId);
 
-        User user = new User();
-        BeanUtils.copyProperties(userParam, user);
-        String password = user.getPassword();
-        String passwordMD5 = DigestUtils.md5DigestAsHex(password.getBytes());
-        user.setPassword(passwordMD5);
+        User user = userParam.convertTo();
         user.setUserId(userId);
         int row = userDAO.updateById(user);
         Assert.state(row != 0, "用户更新失败");

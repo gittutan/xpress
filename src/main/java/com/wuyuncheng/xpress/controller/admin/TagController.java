@@ -1,5 +1,6 @@
 package com.wuyuncheng.xpress.controller.admin;
 
+import com.google.common.collect.Lists;
 import com.wuyuncheng.xpress.model.dto.MetaDTO;
 import com.wuyuncheng.xpress.model.enums.MetaType;
 import com.wuyuncheng.xpress.model.param.MetaParam;
@@ -9,10 +10,12 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -24,7 +27,15 @@ public class TagController {
     @ApiOperation("获取标签列表")
     @GetMapping("/tags")
     @ResponseStatus(HttpStatus.OK)
-    public List<MetaDTO> listTags() {
+    public List<MetaDTO> listTags(@RequestParam(required = false) String id) {
+        if (!StringUtils.isEmpty(id)) {
+            String[] split = id.split(",");
+            List<Integer> list = Lists.newArrayList(split)
+                    .stream()
+                    .map(item -> Integer.valueOf(item))
+                    .collect(Collectors.toList());
+            return metaService.listTagsByIds(list);
+        }
         return metaService.listMetas(MetaType.TAG);
     }
 
