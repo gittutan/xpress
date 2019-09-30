@@ -33,6 +33,7 @@ public class UploadServiceImpl implements UploadService {
         return uploadDAO.selectList(null);
     }
 
+    @Transactional
     @Override
     public void removeFile(Integer uploadId) {
         Upload upload = uploadDAO.selectById(uploadId);

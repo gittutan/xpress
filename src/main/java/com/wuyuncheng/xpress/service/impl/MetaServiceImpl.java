@@ -51,14 +51,14 @@ public class MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaS
         metaMustExist(metaId, metaType);
 
         // 如果是分类，删除该分类下的文章
-        if (metaType.getValue().equals(MetaType.CATEGORY.getValue())) {
+        if (MetaType.CATEGORY.getValue().equals(metaType.getValue())) {
             postService.remove(
                     new QueryWrapper<Post>()
                             .eq("category_id", metaId)
             );
         }
         // 如果是标签，删除 Relationship 表对应的数据
-        if (metaType.getValue().equals(MetaType.TAG.getValue())) {
+        if (MetaType.TAG.getValue().equals(metaType.getValue())) {
             relationshipService.remove(
                     new QueryWrapper<Relationship>()
                             .eq("meta_id", metaId)
@@ -69,6 +69,7 @@ public class MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaS
         Assert.state(row != 0, "删除失败");
     }
 
+    @Transactional
     @Override
     public void createMeta(MetaParam metaParam, MetaType metaType) {
         metaMustNotExist(metaParam.getName(), metaParam.getSlug());
@@ -93,6 +94,7 @@ public class MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaS
         return MetaDTO.convertFrom(meta);
     }
 
+    @Transactional
     @Override
     public void updateMeta(MetaParam metaParam, Integer metaId, MetaType metaType) {
         metaMustExist(metaId, metaType);

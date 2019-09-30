@@ -46,6 +46,7 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
         return createToken(user);
     }
 
+    @Transactional
     @Override
     public void createUser(UserParam userParam) {
         userMustNotExist(userParam.getUsername());
@@ -90,6 +91,7 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
         return UserDTO.convertFrom(user);
     }
 
+    @Transactional
     @Override
     public void updateUser(UserParam userParam, Integer userId) {
         userMustExist(userId);

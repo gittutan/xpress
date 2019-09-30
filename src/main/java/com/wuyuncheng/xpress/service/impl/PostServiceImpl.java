@@ -67,9 +67,10 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
     @Transactional
     @Override
     public void createPost(PostParam postParam) {
+        // 判断文章 slug 是否已经存在
         String slug = postParam.getSlug();
         if (null != slug) {
-            postMustNotExist(slug);
+            postSlugMustNotExist(slug);
         }
 
         // 待插入文章实体类
@@ -101,14 +102,22 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
         return postDTO;
     }
 
+    @Transactional
     @Override
     public void updatePost(PostParam postParam, Integer postId) {
+        // 判断文章 slug 是否已经存在
         postMustExist(postId);
+        Post post = postDAO.selectById(postId);
+        if (null != postParam.getSlug()
+                &&
+                !postParam.getSlug().equals(post.getSlug())) {
+            postSlugMustNotExist(postParam.getSlug());
+        }
 
         // 更新文章
-        Post post = postParam.convertTo();
-        post.setPostId(postId);
-        postDAO.updateById(post);
+        Post postUpdate = postParam.convertTo();
+        postUpdate.setPostId(postId);
+        postDAO.updateById(postUpdate);
 
         /**
          * 更新标签
@@ -136,13 +145,13 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
     /**
      * 文章存在时抛出异常
      */
-    private void postMustNotExist(String postSlug) {
+    private void postSlugMustNotExist(String postSlug) {
         Integer count = postDAO.selectCount(
                 new QueryWrapper<Post>()
                         .eq("slug", postSlug)
         );
         if (count != 0) {
-            throw new AlreadyExistsException("文章已存在");
+            throw new AlreadyExistsException("文章别名已存在");
         }
     }
 

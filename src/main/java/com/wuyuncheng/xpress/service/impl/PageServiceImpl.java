@@ -13,6 +13,7 @@ import com.wuyuncheng.xpress.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -46,13 +47,16 @@ public class PageServiceImpl implements PageService {
         Assert.state(row != 0, "页面删除失败");
     }
 
+    @Transactional
     @Override
     public void createPage(PageParam pageParam) {
+        // 判断页面 slug 是否已经存在
         String slug = pageParam.getSlug();
         if (null != slug) {
-            pageMustNotExist(slug);
+            pageSlugMustNotExist(slug);
         }
 
+        // 插入页面
         Post page = pageParam.convertTo();
         page.setCommentsCount(0);
         page.setCreated(DateUtils.nowUnix());
@@ -74,13 +78,22 @@ public class PageServiceImpl implements PageService {
         return pageDTO;
     }
 
+    @Transactional
     @Override
     public void updatePage(PageParam pageParam, Integer pageId) {
+        // 判断页面 slug 是否已经存在
         pageMustExist(pageId);
+        Post post = postDAO.selectById(pageId);
+        if (null != pageParam.getSlug()
+                &&
+                !pageParam.getSlug().equals(post.getSlug())) {
+            pageSlugMustNotExist(pageParam.getSlug());
+        }
 
-        Post page = pageParam.convertTo();
-        page.setPostId(pageId);
-        postDAO.updateById(page);
+        // 更新页面
+        Post pageUpdate = pageParam.convertTo();
+        pageUpdate.setPostId(pageId);
+        postDAO.updateById(pageUpdate);
     }
 
     /**
@@ -101,13 +114,13 @@ public class PageServiceImpl implements PageService {
     /**
      * 页面存在时抛出异常
      */
-    private void pageMustNotExist(String pageSlug) {
+    private void pageSlugMustNotExist(String pageSlug) {
         Integer count = postDAO.selectCount(
                 new QueryWrapper<Post>()
                         .eq("slug", pageSlug)
         );
         if (count != 0) {
-            throw new AlreadyExistsException("页面已存在");
+            throw new AlreadyExistsException("页面别名已存在");
         }
     }
 

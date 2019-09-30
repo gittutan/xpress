@@ -5,6 +5,7 @@ import com.wuyuncheng.xpress.model.param.SettingParam;
 import com.wuyuncheng.xpress.service.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ public class SettingServiceImpl implements SettingService {
         return map;
     }
 
+    @Transactional
     @Override
     public void updateSettings(SettingParam settingParam) {
         optionDAO.updateOptions("title", settingParam.getTitle());

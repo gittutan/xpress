@@ -7,6 +7,7 @@ import com.wuyuncheng.xpress.model.enums.CommentStatus;
 import com.wuyuncheng.xpress.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class CommentServiceImpl implements CommentService {
         return commentDAO.selectList(null);
     }
 
+    @Transactional
     @Override
     public void removeComment(Integer id) {
         commentMustExist(id);
@@ -30,6 +32,7 @@ public class CommentServiceImpl implements CommentService {
         Assert.state(row != 0, "删除失败");
     }
 
+    @Transactional
     @Override
     public void reviewComment(Integer id) {
         commentMustExist(id);
