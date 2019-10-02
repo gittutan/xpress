@@ -36,9 +36,9 @@ public class CommentController {
     @ApiOperation("设置评论通过审核")
     @PatchMapping("/comments/{id}/approve")
     @ResponseStatus(HttpStatus.OK)
-    public MessageResponse reviewComment(@PathVariable Integer id) {
+    public MessageResponse approveComment(@PathVariable Integer id) {
         Assert.notNull(id, "评论 ID 不能为空");
-        commentService.reviewComment(id);
+        commentService.approveComment(id);
         return MessageResponse.message("评论审核成功");
     }
 

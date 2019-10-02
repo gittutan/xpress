@@ -4,6 +4,7 @@ import com.wuyuncheng.xpress.config.XPressProperties;
 import com.wuyuncheng.xpress.exception.FileException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.UploadDAO;
+import com.wuyuncheng.xpress.model.dto.UploadDTO;
 import com.wuyuncheng.xpress.model.entity.Upload;
 import com.wuyuncheng.xpress.model.param.FileParam;
 import com.wuyuncheng.xpress.service.UploadService;
@@ -19,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UploadServiceImpl implements UploadService {
@@ -29,8 +31,12 @@ public class UploadServiceImpl implements UploadService {
     private XPressProperties properties;
 
     @Override
-    public List<Upload> listFiles() {
-        return uploadDAO.selectList(null);
+    public List<UploadDTO> listFiles() {
+        List<Upload> uploads = uploadDAO.selectList(null);
+        List<UploadDTO> uploadDTOList = uploads.stream()
+                .map(item -> UploadDTO.convertFrom(item))
+                .collect(Collectors.toList());
+        return uploadDTOList;
     }
 
     @Transactional
@@ -56,6 +62,8 @@ public class UploadServiceImpl implements UploadService {
         MultipartFile file = fileParam.getFile();
         // 插入数据库
         Upload upload = fileParam.convertTo();
+        System.err.println(fileParam);
+        System.err.println(upload);
         uploadDAO.insert(upload);
         // 写出文件
         if (file.isEmpty()) {

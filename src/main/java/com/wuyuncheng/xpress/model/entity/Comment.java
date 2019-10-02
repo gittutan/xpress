@@ -1,6 +1,7 @@
 package com.wuyuncheng.xpress.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 @Data
 public class Comment implements Serializable {
 
+    @JsonProperty("id")
     @TableId
     private Integer commentId;
     private Integer postId;
@@ -18,6 +20,7 @@ public class Comment implements Serializable {
     private String content;
     private String ip;
     private String useragent;
+    @JsonProperty("timestamp")
     private Integer created;
 
 }

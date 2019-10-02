@@ -25,7 +25,7 @@ public class FileParam {
     public Upload convertTo() {
         String filename = DateUtils.nowUnix() + file.getOriginalFilename();
         Upload upload = new Upload();
-        upload.setAuthorId(this.getAuthorId());
+        upload.setAuthorId(authorId);
         upload.setFilename(filename);
         upload.setMimetype(file.getContentType());
         upload.setSize(file.getSize());

@@ -11,7 +11,7 @@ import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.entity.User;
 import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
-import com.wuyuncheng.xpress.model.vo.AuthToken;
+import com.wuyuncheng.xpress.model.vo.AuthInfo;
 import com.wuyuncheng.xpress.service.AdminService;
 import com.wuyuncheng.xpress.service.PostService;
 import com.wuyuncheng.xpress.util.JWTUtils;
@@ -34,7 +34,7 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
     private PostService postService;
 
     @Override
-    public AuthToken getToken(LoginParam loginParam) {
+    public AuthInfo getToken(LoginParam loginParam) {
         String username = loginParam.getUsername();
         String passwordMD5 = DigestUtils.md5DigestAsHex(loginParam.getPassword().getBytes());
         User user = userDAO.selectOne(
@@ -105,14 +105,16 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
     /**
      * 该用户不存在时抛出异常
      */
-    private void userMustExist(Serializable idOrName) {
+    private User userMustExist(Serializable idOrName) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<User>()
                 .eq("user_id", idOrName)
                 .or()
                 .eq("username", idOrName);
-        if (null == userDAO.selectOne(queryWrapper)) {
+        User user = userDAO.selectOne(queryWrapper);
+        if (null == user) {
             throw new NotFoundException("该用户不存在");
         }
+        return user;
     }
 
     /**
@@ -128,9 +130,10 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
         }
     }
 
-    private AuthToken createToken(User user) {
+    private AuthInfo createToken(User user) {
         String token = JWTUtils.generateToken(user);
-        return new AuthToken(token);
+        UserDTO userDTO = UserDTO.convertFrom(user);
+        return new AuthInfo(userDTO, token);
     }
 
 }

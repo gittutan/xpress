@@ -12,7 +12,8 @@ public interface MetaDAO extends BaseMapper<Meta> {
 
     int decrementCountById(Integer metaId);
     int decrementCountByPostId(Integer postId);
-    int incrementCountByName(Collection<String> metaNames);
+    int incrementCountById(Integer metaId);
+    int incrementCountByIds(List<Integer> metaIds);
     List<Meta> selectTagsByIds(List<Integer> ids);
 
 }

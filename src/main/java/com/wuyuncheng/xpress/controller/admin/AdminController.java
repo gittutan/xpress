@@ -3,7 +3,7 @@ package com.wuyuncheng.xpress.controller.admin;
 import com.wuyuncheng.xpress.model.dto.UserDTO;
 import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
-import com.wuyuncheng.xpress.model.vo.AuthToken;
+import com.wuyuncheng.xpress.model.vo.AuthInfo;
 import com.wuyuncheng.xpress.service.AdminService;
 import com.wuyuncheng.xpress.util.MessageResponse;
 import io.swagger.annotations.*;
@@ -25,7 +25,7 @@ public class AdminController {
     @ApiOperation("登陆")
     @PostMapping("/token")
     @ResponseStatus(HttpStatus.CREATED)
-    public AuthToken login(@RequestBody @Valid LoginParam loginParam) {
+    public AuthInfo login(@RequestBody @Valid LoginParam loginParam) {
         return adminService.getToken(loginParam);
     }
 

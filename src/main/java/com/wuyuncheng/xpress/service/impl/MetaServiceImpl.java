@@ -116,8 +116,13 @@ public class MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaS
     }
 
     @Override
-    public boolean incrementCountByName(Collection<String> metaNames) {
-        return metaDAO.incrementCountByName(metaNames) != 0;
+    public boolean incrementCountById(Integer metaId) {
+        return metaDAO.incrementCountById(metaId) != 0;
+    }
+
+    @Override
+    public boolean incrementCountByIds(List<Integer> metaIds) {
+        return metaDAO.incrementCountByIds(metaIds) != 0;
     }
 
     private List<MetaDTO> convertToMetaDTOList(Collection<Meta> metas) {
@@ -132,13 +137,15 @@ public class MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaS
     /**
      * Meta 不存在时抛出异常
      */
-    private void metaMustExist(Integer metaId, MetaType metaType) {
+    private Meta metaMustExist(Integer metaId, MetaType metaType) {
         QueryWrapper<Meta> queryWrapper = new QueryWrapper<Meta>()
                 .eq("meta_id", metaId)
                 .eq("type", metaType.getValue());
-        if (null == metaDAO.selectOne(queryWrapper)) {
+        Meta meta = metaDAO.selectOne(queryWrapper);
+        if (null == meta) {
             throw new NotFoundException("数据不存在");
         }
+        return meta;
     }
 
     /**

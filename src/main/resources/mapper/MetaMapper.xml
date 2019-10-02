@@ -19,13 +19,19 @@
         WHERE relationship.post_id = #{postId}
     </update>
 
-    <update id="incrementCountByName">
+    <update id="incrementCountById">
+        UPDATE `meta`
+        SET count = count + 1
+        WHERE meta_id = #{metaId}
+    </update>
+
+    <update id="incrementCountByIds">
         UPDATE `meta`
         SET count = count + 1
         <where>
-            <if test="null != collection and collection.size() > 0">
-                name IN
-                <foreach collection="collection" item="item" index="index" open="(" close=")" separator=",">
+            <if test="null != list and list.size() > 0">
+                meta_id IN
+                <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
                     #{item}
                 </foreach>
             </if>

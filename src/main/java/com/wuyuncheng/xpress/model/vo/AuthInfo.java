@@ -1,6 +1,6 @@
 package com.wuyuncheng.xpress.model.vo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wuyuncheng.xpress.model.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthToken {
+public class AuthInfo {
 
-    @JsonProperty("token")
+    private UserDTO user;
     private String token;
 
 }

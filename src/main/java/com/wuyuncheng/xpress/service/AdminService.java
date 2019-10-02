@@ -5,13 +5,13 @@ import com.wuyuncheng.xpress.model.dto.UserDTO;
 import com.wuyuncheng.xpress.model.entity.User;
 import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
-import com.wuyuncheng.xpress.model.vo.AuthToken;
+import com.wuyuncheng.xpress.model.vo.AuthInfo;
 
 import java.util.List;
 
 public interface AdminService extends IService<User> {
 
-    AuthToken getToken(LoginParam loginParam);
+    AuthInfo getToken(LoginParam loginParam);
     void createUser(UserParam userParam);
     List<UserDTO> listUsers();
     void removeUser(Integer userId);

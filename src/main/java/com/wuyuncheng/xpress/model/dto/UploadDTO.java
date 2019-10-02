@@ -1,8 +1,9 @@
 package com.wuyuncheng.xpress.model.dto;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wuyuncheng.xpress.model.entity.Post;
+import com.wuyuncheng.xpress.model.entity.Upload;
 import com.wuyuncheng.xpress.service.AdminService;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
@@ -14,7 +15,7 @@ import java.io.Serializable;
 
 @Component
 @Data
-public class PageDTO implements Serializable {
+public class UploadDTO implements Serializable {
 
     private static AdminService adminService;
 
@@ -24,29 +25,24 @@ public class PageDTO implements Serializable {
 
     @PostConstruct
     public void init() {
-        PageDTO.adminService = adminServiceTemp;
+        UploadDTO.adminService = adminServiceTemp;
     }
 
     @JsonProperty("id")
-    private Integer postId;
-    private String status;
-    @JsonIgnore
-    private Integer authorId;
+    @TableId
+    private Integer uploadId;
     private UserDTO author;
-    private String title;
-    private String content;
-    private String slug;
-    private Boolean isAllowComments;
-    private Integer commentsCount;
+    private String filename;
+    private String mimetype;
+    private Long size;
     @JsonProperty("timestamp")
-    private Integer modified;
+    private Integer created;
 
-    public static PageDTO convertFrom(Post page) {
-        PageDTO pageDTO = new PageDTO();
-        BeanUtils.copyProperties(page, pageDTO);
-        UserDTO author = adminService.getUser(pageDTO.getAuthorId());
-        pageDTO.setAuthor(author);
-        return pageDTO;
+    public static UploadDTO convertFrom(Upload upload) {
+        UploadDTO uploadDTO = new UploadDTO();
+        BeanUtils.copyProperties(upload, uploadDTO);
+        UserDTO author = adminService.getUser(upload.getAuthorId());
+        uploadDTO.setAuthor(author);
+        return uploadDTO;
     }
-
 }

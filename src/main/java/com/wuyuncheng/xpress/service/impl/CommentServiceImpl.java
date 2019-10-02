@@ -34,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void reviewComment(Integer id) {
+    public void approveComment(Integer id) {
         commentMustExist(id);
 
         Comment comment = new Comment();
@@ -43,11 +43,12 @@ public class CommentServiceImpl implements CommentService {
         commentDAO.updateById(comment);
     }
 
-    private void commentMustExist(Integer id) {
+    private Comment commentMustExist(Integer id) {
         Comment comment = commentDAO.selectById(id);
         if (null == comment) {
             throw new NotFoundException("评论不存在");
         }
+        return comment;
     }
 
 }

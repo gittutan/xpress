@@ -81,9 +81,8 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
         // 插入文章到文章表
         int row = postDAO.insert(post);
         Assert.state(row != 0, "文章创建失败");
-        if (null == postParam.getTags()) {
-            return;
-        }
+        // 分类 count + 1
+        metaService.incrementCountById(post.getCategoryId());
         // 创建 Tags
         createTagsByPostId(postParam.getTags(), post.getPostId());
     }
@@ -106,12 +105,18 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
     @Override
     public void updatePost(PostParam postParam, Integer postId) {
         // 判断文章 slug 是否已经存在
-        postMustExist(postId);
-        Post post = postDAO.selectById(postId);
+        Post post = postMustExist(postId);
         if (null != postParam.getSlug()
                 &&
                 !postParam.getSlug().equals(post.getSlug())) {
             postSlugMustNotExist(postParam.getSlug());
+        }
+        // 判断分类是否被修改
+        if (!postParam.getCategoryId().equals(post.getCategoryId())) {
+            Integer oldCategoryId = post.getCategoryId();
+            Integer newCategoryId = postParam.getCategoryId();
+            metaService.decrementCountById(oldCategoryId);
+            metaService.incrementCountById(newCategoryId);
         }
 
         // 更新文章
@@ -164,6 +169,9 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
          * 重复抛出异常
          * 不重复记录标签 ID
          */
+        if (null == tags || tags.isEmpty()) {
+            return;
+        }
         List<Meta> metas = metaService.list(
                 new QueryWrapper<Meta>()
                         .eq("type", MetaType.TAG.getValue())
@@ -174,15 +182,13 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
                     String tagName = meta.getName();
                     if (tags.contains(tagName)) {
                         metaIds.add(meta.getMetaId());
-                    } else {
-//                        throw new NotFoundException("标签: " + tagName + " 不存在");
                     }
                 });
         if (metaIds.size() != tags.size()) {
             throw new NotFoundException("请添加已存在的标签");
         }
         // 标签 count + 1
-        metaService.incrementCountByName(tags);
+        metaService.incrementCountByIds(metaIds);
         // 在 relationship 表中添加关系
         List<Relationship> relationships = new ArrayList<>();
         for (Integer meteId : metaIds) {

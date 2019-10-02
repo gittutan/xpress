@@ -6,7 +6,6 @@ import com.wuyuncheng.xpress.model.entity.Meta;
 import com.wuyuncheng.xpress.model.enums.MetaType;
 import com.wuyuncheng.xpress.model.param.MetaParam;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface MetaService extends IService<Meta> {
@@ -19,6 +18,7 @@ public interface MetaService extends IService<Meta> {
     void updateMeta(MetaParam metaParam, Integer metaId, MetaType metaType);
     boolean decrementCountById(Integer metaId);
     boolean decrementCountByPostId(Integer postId);
-    boolean incrementCountByName(Collection<String> metaNames);
+    boolean incrementCountById(Integer metaId);
+    boolean incrementCountByIds(List<Integer> metaIds);
 
 }

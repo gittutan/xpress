@@ -8,6 +8,6 @@ public interface CommentService {
 
     List<Comment> listComments();
     void removeComment(Integer id);
-    void reviewComment(Integer id);
+    void approveComment(Integer id);
 
 }

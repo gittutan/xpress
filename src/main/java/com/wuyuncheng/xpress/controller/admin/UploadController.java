@@ -1,5 +1,6 @@
 package com.wuyuncheng.xpress.controller.admin;
 
+import com.wuyuncheng.xpress.model.dto.UploadDTO;
 import com.wuyuncheng.xpress.model.entity.Upload;
 import com.wuyuncheng.xpress.model.param.FileParam;
 import com.wuyuncheng.xpress.service.UploadService;
@@ -22,7 +23,7 @@ public class UploadController {
     @ApiOperation("获取文件列表")
     @GetMapping("/files")
     @ResponseStatus(HttpStatus.OK)
-    public List<Upload> listFiles() {
+    public List<UploadDTO> listFiles() {
         return uploadService.listFiles();
     }
 
@@ -37,7 +38,7 @@ public class UploadController {
     @ApiOperation("创建文件")
     @PostMapping("/files")
     @ResponseStatus(HttpStatus.CREATED)
-    public Upload createFile(@RequestBody @Valid FileParam fileParam) {
+    public Upload createFile(@Valid FileParam fileParam) {
         return uploadService.createFile(fileParam);
     }
 
