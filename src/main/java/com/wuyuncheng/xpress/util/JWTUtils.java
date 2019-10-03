@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.Date;
 
@@ -43,8 +44,8 @@ public class JWTUtils {
                 .compact();
     }
 
-    public static boolean validateToken(String jws) {
-        if (null == jws) {
+    public static boolean validateToken(String token) {
+        if (null == token) {
             return false;
         }
         Claims claimsBody;
@@ -52,7 +53,7 @@ public class JWTUtils {
         try {
             claimsBody = Jwts.parser()
                     .setSigningKey(properties.getJwtSecret())
-                    .parseClaimsJws(jws)
+                    .parseClaimsJws(token)
                     .getBody();
         } catch (JwtException e) {
             return false;
@@ -62,6 +63,17 @@ public class JWTUtils {
             return false;
         }
         return true;
+    }
+
+    public static Integer getCurrentUserId() {
+        HttpServletRequest request = ServletUtils.getCurrentRequest().get();
+        String token = request.getHeader(properties.getJwtHeader());
+        String userId = Jwts.parser()
+                .setSigningKey(properties.getJwtSecret())
+                .parseClaimsJws(token)
+                .getBody()
+                .getId();
+        return Integer.valueOf(userId);
     }
 
 }

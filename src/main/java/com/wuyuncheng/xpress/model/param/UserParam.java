@@ -32,7 +32,7 @@ public class UserParam {
     @Email(message = "请输入正确的 Email")
     private String mail;
 
-    @ApiModelProperty("网站")
+    @ApiModelProperty("网址")
     @NotBlank(message = "URL 不能为空")
     @Size(max = 100, message = "URL 长度不能超过 {max}")
     @Pattern(regexp = "^((ht|f)tps?):\\/\\/([\\w-]+(\\.[\\w-]+)*\\/?)+(\\?([\\w\\-\\.,@?^=%&:\\/~\\+#]*)+)?$", message = "请输入合法的URL")

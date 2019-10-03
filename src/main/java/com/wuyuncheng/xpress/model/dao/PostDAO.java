@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostDAO extends BaseMapper<Post> {
-//    List<PostDetailDTO> selectPostDetail();
-//    List<PageDetailDTO> selectPageDetail();
 }

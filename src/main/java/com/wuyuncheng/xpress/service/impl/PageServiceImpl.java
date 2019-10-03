@@ -10,7 +10,6 @@ import com.wuyuncheng.xpress.model.enums.PostType;
 import com.wuyuncheng.xpress.model.param.PageParam;
 import com.wuyuncheng.xpress.service.PageService;
 import com.wuyuncheng.xpress.util.DateUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -16,6 +16,7 @@ public interface AdminService extends IService<User> {
     List<UserDTO> listUsers();
     void removeUser(Integer userId);
     UserDTO getUser(Integer userId);
+    UserDTO getCurrentUser();
     void updateUser(UserParam userParam, Integer userId);
 
 }

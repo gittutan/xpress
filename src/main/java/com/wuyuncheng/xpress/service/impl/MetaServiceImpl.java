@@ -52,10 +52,18 @@ public class MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaS
 
         // 如果是分类，删除该分类下的文章
         if (MetaType.CATEGORY.getValue().equals(metaType.getValue())) {
-            postService.remove(
-                    new QueryWrapper<Post>()
-                            .eq("category_id", metaId)
-            );
+            QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>().eq("category_id", metaId);
+            List<Post> postsDelete = postService.list(queryWrapper);
+            for (Post post : postsDelete) {
+                // 被删除文章的标签 count - 1
+                metaDAO.decrementCountByPostId(post.getPostId());
+                // 删除 relationship 表中的数据
+                relationshipService.remove(
+                        new QueryWrapper<Relationship>()
+                                .eq("post_id", post.getPostId())
+                );
+            }
+            postService.remove(queryWrapper);
         }
         // 如果是标签，删除 Relationship 表对应的数据
         if (MetaType.TAG.getValue().equals(metaType.getValue())) {

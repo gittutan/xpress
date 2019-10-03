@@ -60,10 +60,8 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public Upload createFile(FileParam fileParam) {
         MultipartFile file = fileParam.getFile();
-        // 插入数据库
         Upload upload = fileParam.convertTo();
-        System.err.println(fileParam);
-        System.err.println(upload);
+        // 插入数据库
         uploadDAO.insert(upload);
         // 写出文件
         if (file.isEmpty()) {

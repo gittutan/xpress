@@ -2,7 +2,8 @@ package com.wuyuncheng.xpress.model.param;
 
 import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.enums.PostType;
-import com.wuyuncheng.xpress.model.enums.annotation.ValidateString;
+import com.wuyuncheng.xpress.util.validator.PostSlugValidation;
+import com.wuyuncheng.xpress.util.validator.PostStatusValidation;
 import com.wuyuncheng.xpress.util.DateUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,15 +22,17 @@ public class PostParam {
 
     @ApiModelProperty("文章状态")
     @NotBlank(message = "文章状态不能为空")
-    @ValidateString(acceptedValues = {"publish", "draft"})
+    @PostStatusValidation
     @Size(max = 50, message = "文章状态长度不能超过 {max}")
     private String status;
 
     @ApiModelProperty("文章作者 ID")
+    @NotNull(message = "文章作者 ID 不能为空")
     @Digits(integer = 20, fraction = 0)
     private Integer authorId;
 
     @ApiModelProperty("文章分类 ID")
+    @NotNull(message = "文章分类 ID 不能为空")
     @Digits(integer = 20, fraction = 0)
     private Integer categoryId;
 
@@ -43,6 +46,7 @@ public class PostParam {
     private String content;
 
     @ApiModelProperty("文章缩略名")
+    @PostSlugValidation
     @Size(max = 200, message = "文章缩略名长度不能超过 {max} 字符")
     private String slug;
 

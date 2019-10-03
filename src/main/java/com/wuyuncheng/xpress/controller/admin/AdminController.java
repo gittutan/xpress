@@ -60,6 +60,13 @@ public class AdminController {
         return adminService.getUser(id);
     }
 
+    @ApiOperation("获取当前用户")
+    @GetMapping("/users/current")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO getCurrentUser() {
+        return adminService.getCurrentUser();
+    }
+
     @ApiOperation("更新用户")
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)

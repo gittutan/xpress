@@ -12,8 +12,8 @@
     </update>
 
     <update id="decrementCountByPostId">
-        UPDATE `relationship`
-        INNER JOIN `meta`
+        UPDATE `meta`
+        INNER JOIN `relationship`
         ON meta.meta_id = relationship.meta_id
         SET meta.count = meta.count - 1
         WHERE relationship.post_id = #{postId}

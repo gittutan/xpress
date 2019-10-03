@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.AuthException;
+import com.wuyuncheng.xpress.exception.ForbiddenException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.UserDAO;
 import com.wuyuncheng.xpress.model.dto.UserDTO;
@@ -70,6 +71,12 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
     @Transactional
     @Override
     public void removeUser(Integer userId) {
+        // 禁止删除当前用户
+        Integer currentUserId = JWTUtils.getCurrentUserId();
+        if (currentUserId.equals(userId)) {
+            throw new ForbiddenException("禁止删除当前用户");
+        }
+
         userMustExist(userId);
 
         // 删除该用户发布的所有文章
@@ -88,6 +95,13 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
         if (null == user) {
             throw new NotFoundException("该用户不存在");
         }
+        return UserDTO.convertFrom(user);
+    }
+
+    @Override
+    public UserDTO getCurrentUser() {
+        Integer currentUserId = JWTUtils.getCurrentUserId();
+        User user = userDAO.selectById(currentUserId);
         return UserDTO.convertFrom(user);
     }
 
@@ -132,8 +146,7 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
 
     private AuthInfo createToken(User user) {
         String token = JWTUtils.generateToken(user);
-        UserDTO userDTO = UserDTO.convertFrom(user);
-        return new AuthInfo(userDTO, token);
+        return new AuthInfo(token);
     }
 
 }
