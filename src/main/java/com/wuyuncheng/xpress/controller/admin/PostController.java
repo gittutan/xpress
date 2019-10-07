@@ -1,9 +1,10 @@
 package com.wuyuncheng.xpress.controller.admin;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wuyuncheng.xpress.model.dto.PostDTO;
 import com.wuyuncheng.xpress.model.param.PostParam;
 import com.wuyuncheng.xpress.service.PostService;
-import com.wuyuncheng.xpress.util.MessageResponse;
+import com.wuyuncheng.xpress.model.vo.MessageResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,9 +12,8 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
-@RestController
+@RestController("ApiPostController")
 @RequestMapping("/api")
 public class PostController {
 
@@ -23,15 +23,15 @@ public class PostController {
     @ApiOperation("获取文章列表")
     @GetMapping("/posts")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostDTO> listPosts() {
-        return postService.listPosts();
+    public IPage<PostDTO> listPosts(@RequestParam Integer page,
+                                    @RequestParam Integer size) {
+        return postService.listPosts(page, size);
     }
 
     @ApiOperation("删除文章")
     @DeleteMapping("/posts/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removePost(@PathVariable Integer id) {
-        Assert.notNull(id, "文章 ID 不能为空");
         postService.removePost(id);
     }
 
@@ -48,7 +48,6 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     public MessageResponse updatePost(@RequestBody @Valid PostParam postParam,
                                       @PathVariable Integer id) {
-        Assert.notNull(id, "文章 ID 不能为空");
         postService.updatePost(postParam, id);
         return MessageResponse.message("文章更新成功");
     }
@@ -57,7 +56,6 @@ public class PostController {
     @GetMapping("/posts/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PostDTO getPost(@PathVariable Integer id) {
-        Assert.notNull(id, "文章 ID 不能为空");
         return postService.getPost(id);
     }
 

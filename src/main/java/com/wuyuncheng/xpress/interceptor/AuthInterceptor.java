@@ -18,7 +18,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     private XPressProperties properties;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws AuthException {
         String token = request.getHeader(properties.getJwtHeader());
         if (StringUtils.isEmpty(token)) {
             throw new AuthException("身份认证失败");

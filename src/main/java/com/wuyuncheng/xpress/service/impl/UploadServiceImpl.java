@@ -1,5 +1,8 @@
 package com.wuyuncheng.xpress.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wuyuncheng.xpress.config.XPressProperties;
 import com.wuyuncheng.xpress.exception.FileException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
@@ -19,8 +22,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UploadServiceImpl implements UploadService {
@@ -31,12 +32,10 @@ public class UploadServiceImpl implements UploadService {
     private XPressProperties properties;
 
     @Override
-    public List<UploadDTO> listFiles() {
-        List<Upload> uploads = uploadDAO.selectList(null);
-        List<UploadDTO> uploadDTOList = uploads.stream()
-                .map(item -> UploadDTO.convertFrom(item))
-                .collect(Collectors.toList());
-        return uploadDTOList;
+    public IPage<UploadDTO> listFiles(Integer pageNum, Integer pageSize) {
+        IPage<Upload> page = new Page<>(pageNum, pageSize);
+        IPage<Upload> files = uploadDAO.selectPage(page, new QueryWrapper<>());
+        return files.convert(item -> UploadDTO.convertFrom(item));
     }
 
     @Transactional

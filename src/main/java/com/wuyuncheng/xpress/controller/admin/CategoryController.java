@@ -4,7 +4,7 @@ import com.wuyuncheng.xpress.model.dto.MetaDTO;
 import com.wuyuncheng.xpress.model.enums.MetaType;
 import com.wuyuncheng.xpress.model.param.MetaParam;
 import com.wuyuncheng.xpress.service.MetaService;
-import com.wuyuncheng.xpress.util.MessageResponse;
+import com.wuyuncheng.xpress.model.vo.MessageResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@RestController("ApiCategoryController")
 @RequestMapping("/api")
 public class CategoryController {
 
@@ -32,7 +32,6 @@ public class CategoryController {
     @DeleteMapping("/categories/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeCategory(@PathVariable Integer id) {
-        Assert.notNull(id, "分类 ID 不能为空");
         metaService.removeMeta(id, MetaType.CATEGORY);
     }
 
@@ -49,7 +48,6 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.OK)
     public MessageResponse updateCategory(@RequestBody @Valid MetaParam metaParam,
                                           @PathVariable Integer id) {
-        Assert.notNull(id, "分类 ID 不能为空");
         metaService.updateMeta(metaParam, id, MetaType.CATEGORY);
         return MessageResponse.message("分类更新成功");
     }
@@ -58,7 +56,6 @@ public class CategoryController {
     @GetMapping("/categories/{id}")
     @ResponseStatus(HttpStatus.OK)
     public MetaDTO getCategory(@PathVariable Integer id) {
-        Assert.notNull(id, "分类 ID 不能为空");
         return metaService.getMeta(id, MetaType.CATEGORY);
     }
 

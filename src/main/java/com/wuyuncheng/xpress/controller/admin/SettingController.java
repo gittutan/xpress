@@ -2,7 +2,7 @@ package com.wuyuncheng.xpress.controller.admin;
 
 import com.wuyuncheng.xpress.model.param.SettingParam;
 import com.wuyuncheng.xpress.service.SettingService;
-import com.wuyuncheng.xpress.util.MessageResponse;
+import com.wuyuncheng.xpress.model.vo.MessageResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Map;
 
-@RestController
+@RestController("ApiSettingController")
 @RequestMapping("/api")
 public class SettingController {
 

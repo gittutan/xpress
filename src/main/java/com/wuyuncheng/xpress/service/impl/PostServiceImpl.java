@@ -1,6 +1,8 @@
 package com.wuyuncheng.xpress.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
@@ -36,17 +38,12 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
     private RelationshipService relationshipService;
 
     @Override
-    public List<PostDTO> listPosts() {
-        List<Post> posts = postDAO.selectList(
-                new QueryWrapper<Post>()
-                        .eq("type", PostType.POST.getValue())
-        );
-        List<PostDTO> postDTOList = new ArrayList<>();
-        for (Post post : posts) {
-            PostDTO postDTO = PostDTO.convertFrom(post);
-            postDTOList.add(postDTO);
-        }
-        return postDTOList;
+    public IPage<PostDTO> listPosts(Integer pageNum, Integer pageSize) {
+        IPage<Post> page = new Page<>(pageNum, pageSize);
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
+                .eq("type", PostType.POST.getValue());
+        IPage<Post> posts = postDAO.selectPage(page, queryWrapper);
+        return posts.convert(post -> PostDTO.convertFrom(post));
     }
 
     @Transactional
@@ -94,6 +91,28 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
                         .eq("post_id", postId)
                         .eq("type", PostType.POST.getValue())
         );
+        if (null == post) {
+            throw new NotFoundException("文章未找到");
+        }
+        PostDTO postDTO = PostDTO.convertFrom(post);
+        return postDTO;
+    }
+
+    @Override
+    public PostDTO getPostBySlugOrId(String slugOrId) {
+        Post post = postDAO.selectOne(
+                new QueryWrapper<Post>()
+                        .eq("slug", slugOrId)
+                        .eq("type", PostType.POST.getValue())
+        );
+        if (null == post) {
+            Integer id = Integer.valueOf(slugOrId);
+            post = postDAO.selectOne(
+                    new QueryWrapper<Post>()
+                            .eq("post_id", id)
+                            .eq("type", PostType.POST.getValue())
+            );
+        }
         if (null == post) {
             throw new NotFoundException("文章未找到");
         }

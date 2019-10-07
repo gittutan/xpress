@@ -17,6 +17,9 @@ import java.util.Date;
 @Component
 public class JWTUtils {
 
+    private JWTUtils() {
+    }
+
     /**
      * 静态方法不能直接使用 @Autowired 注入
      */
@@ -28,9 +31,6 @@ public class JWTUtils {
     @PostConstruct
     public void init() {
         JWTUtils.properties = propertiesTemp;
-    }
-
-    private JWTUtils() {
     }
 
     public static String generateToken(User user) {
@@ -66,7 +66,7 @@ public class JWTUtils {
     }
 
     public static Integer getCurrentUserId() {
-        HttpServletRequest request = ServletUtils.getCurrentRequest().get();
+        HttpServletRequest request = XPressUtils.getCurrentRequest().get();
         String token = request.getHeader(properties.getJwtHeader());
         String userId = Jwts.parser()
                 .setSigningKey(properties.getJwtSecret())

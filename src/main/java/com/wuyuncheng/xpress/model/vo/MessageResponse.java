@@ -1,4 +1,4 @@
-package com.wuyuncheng.xpress.util;
+package com.wuyuncheng.xpress.model.vo;
 
 import lombok.Data;
 

@@ -1,5 +1,8 @@
 package com.wuyuncheng.xpress.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.CommentDAO;
 import com.wuyuncheng.xpress.model.entity.Comment;
@@ -19,8 +22,9 @@ public class CommentServiceImpl implements CommentService {
     private CommentDAO commentDAO;
 
     @Override
-    public List<Comment> listComments() {
-        return commentDAO.selectList(null);
+    public IPage<Comment> listComments(Integer pageNum, Integer pageSize) {
+        IPage<Comment> page = new Page<>(pageNum, pageSize);
+        return commentDAO.selectPage(page, new QueryWrapper<>());
     }
 
     @Transactional

@@ -1,17 +1,16 @@
 package com.wuyuncheng.xpress.controller.admin;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wuyuncheng.xpress.model.entity.Comment;
 import com.wuyuncheng.xpress.service.CommentService;
-import com.wuyuncheng.xpress.util.MessageResponse;
+import com.wuyuncheng.xpress.model.vo.MessageResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
+@RestController("ApiCommentController")
 @RequestMapping("/api")
 public class CommentController {
 
@@ -21,15 +20,15 @@ public class CommentController {
     @ApiOperation("获取评论列表")
     @GetMapping("/comments")
     @ResponseStatus(HttpStatus.OK)
-    public List<Comment> listComments() {
-        return commentService.listComments();
+    public IPage<Comment> listComments(@RequestParam Integer page,
+                                       @RequestParam Integer size) {
+        return commentService.listComments(page, size);
     }
 
     @ApiOperation("删除评论")
     @DeleteMapping("/comments/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeComment(@PathVariable Integer id) {
-        Assert.notNull(id, "评论 ID 不能为空");
         commentService.removeComment(id);
     }
 
@@ -37,7 +36,6 @@ public class CommentController {
     @PatchMapping("/comments/{id}/approve")
     @ResponseStatus(HttpStatus.OK)
     public MessageResponse approveComment(@PathVariable Integer id) {
-        Assert.notNull(id, "评论 ID 不能为空");
         commentService.approveComment(id);
         return MessageResponse.message("评论审核成功");
     }

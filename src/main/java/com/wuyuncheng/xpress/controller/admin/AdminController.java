@@ -5,7 +5,7 @@ import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
 import com.wuyuncheng.xpress.model.vo.AuthInfo;
 import com.wuyuncheng.xpress.service.AdminService;
-import com.wuyuncheng.xpress.util.MessageResponse;
+import com.wuyuncheng.xpress.model.vo.MessageResponse;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@RestController("ApiAdminController")
 @RequestMapping("/api")
 public class AdminController {
 
@@ -48,7 +48,6 @@ public class AdminController {
     @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeUser(@PathVariable Integer id) {
-        Assert.notNull(id, "用户 ID 不能为空");
         adminService.removeUser(id);
     }
 
@@ -56,7 +55,6 @@ public class AdminController {
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO getUser(@PathVariable Integer id) {
-        Assert.notNull(id, "用户 ID 不能为空");
         return adminService.getUser(id);
     }
 
@@ -72,7 +70,6 @@ public class AdminController {
     @ResponseStatus(HttpStatus.OK)
     public MessageResponse updateUser(@RequestBody @Valid UserParam userParam,
                                       @PathVariable Integer id) {
-        Assert.notNull(id, "用户 ID 不能为空");
         adminService.updateUser(userParam, id);
         return MessageResponse.message("用户信息更新成功");
     }

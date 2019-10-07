@@ -1,5 +1,6 @@
 package com.wuyuncheng.xpress.controller.admin;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wuyuncheng.xpress.model.dto.UploadDTO;
 import com.wuyuncheng.xpress.model.entity.Upload;
 import com.wuyuncheng.xpress.model.param.FileParam;
@@ -11,9 +12,8 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
-@RestController
+@RestController("ApiUploadController")
 @RequestMapping("/api")
 public class UploadController {
 
@@ -23,15 +23,15 @@ public class UploadController {
     @ApiOperation("获取文件列表")
     @GetMapping("/files")
     @ResponseStatus(HttpStatus.OK)
-    public List<UploadDTO> listFiles() {
-        return uploadService.listFiles();
+    public IPage<UploadDTO> listFiles(@RequestParam Integer page,
+                                      @RequestParam Integer size) {
+        return uploadService.listFiles(page, size);
     }
 
     @ApiOperation("删除文件")
     @DeleteMapping("/files/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeFile(@PathVariable Integer id) {
-        Assert.notNull(id, "文件 ID 不能为空");
         uploadService.removeFile(id);
     }
 

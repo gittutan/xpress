@@ -5,6 +5,9 @@ import java.util.Date;
 
 public class DateUtils {
 
+    private DateUtils() {
+    }
+
     /**
      * Get current unix time.
      *

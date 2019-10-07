@@ -5,7 +5,7 @@ import com.wuyuncheng.xpress.model.dto.MetaDTO;
 import com.wuyuncheng.xpress.model.enums.MetaType;
 import com.wuyuncheng.xpress.model.param.MetaParam;
 import com.wuyuncheng.xpress.service.MetaService;
-import com.wuyuncheng.xpress.util.MessageResponse;
+import com.wuyuncheng.xpress.model.vo.MessageResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
+@RestController("ApiTagController")
 @RequestMapping("/api")
 public class TagController {
 
@@ -43,7 +43,6 @@ public class TagController {
     @DeleteMapping("/tags/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeTag(@PathVariable Integer id) {
-        Assert.notNull(id, "标签 ID 不能为空");
         metaService.removeMeta(id, MetaType.TAG);
     }
 
@@ -60,7 +59,6 @@ public class TagController {
     @ResponseStatus(HttpStatus.OK)
     public MessageResponse updateTag(@RequestBody @Valid MetaParam metaParam,
                                      @PathVariable Integer id) {
-        Assert.notNull(id, "标签 ID 不能为空");
         metaService.updateMeta(metaParam, id, MetaType.TAG);
         return MessageResponse.message("标签更新成功");
     }
@@ -69,7 +67,6 @@ public class TagController {
     @GetMapping("/tags/{id}")
     @ResponseStatus(HttpStatus.OK)
     public MetaDTO getTag(@PathVariable Integer id) {
-        Assert.notNull(id, "标签 ID 不能为空");
         return metaService.getMeta(id, MetaType.TAG);
     }
 

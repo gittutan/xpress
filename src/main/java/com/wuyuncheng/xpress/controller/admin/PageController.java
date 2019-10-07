@@ -3,7 +3,7 @@ package com.wuyuncheng.xpress.controller.admin;
 import com.wuyuncheng.xpress.model.dto.PageDTO;
 import com.wuyuncheng.xpress.model.param.PageParam;
 import com.wuyuncheng.xpress.service.PageService;
-import com.wuyuncheng.xpress.util.MessageResponse;
+import com.wuyuncheng.xpress.model.vo.MessageResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@RestController("ApiPageController")
 @RequestMapping("/api")
 public class PageController {
 
@@ -31,7 +31,6 @@ public class PageController {
     @DeleteMapping("/pages/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removePost(@PathVariable Integer id) {
-        Assert.notNull(id, "页面 ID 不能为空");
         pageService.removePage(id);
     }
 
@@ -48,7 +47,6 @@ public class PageController {
     @ResponseStatus(HttpStatus.OK)
     public MessageResponse updatePost(@RequestBody @Valid PageParam pageParam,
                                       @PathVariable Integer id) {
-        Assert.notNull(id, "页面 ID 不能为空");
         pageService.updatePage(pageParam, id);
         return MessageResponse.message("页面更新成功");
     }
@@ -57,7 +55,6 @@ public class PageController {
     @GetMapping("/pages/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PageDTO getPost(@PathVariable Integer id) {
-        Assert.notNull(id, "页面 ID 不能为空");
         return pageService.getPage(id);
     }
 

@@ -20,4 +20,7 @@ public class SettingParam {
     @ApiModelProperty("网站导航栏HTML")
     private String navbar;
 
+    @ApiModelProperty("网站URL")
+    private String siteURL;
+
 }
