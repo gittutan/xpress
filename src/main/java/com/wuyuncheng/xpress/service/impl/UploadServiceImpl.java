@@ -8,6 +8,7 @@ import com.wuyuncheng.xpress.exception.FileException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.UploadDAO;
 import com.wuyuncheng.xpress.model.dto.UploadDTO;
+import com.wuyuncheng.xpress.model.entity.Comment;
 import com.wuyuncheng.xpress.model.entity.Upload;
 import com.wuyuncheng.xpress.model.param.FileParam;
 import com.wuyuncheng.xpress.service.UploadService;
@@ -32,10 +33,9 @@ public class UploadServiceImpl implements UploadService {
     private XPressProperties properties;
 
     @Override
-    public IPage<UploadDTO> listFiles(Integer pageNum, Integer pageSize) {
-        IPage<Upload> page = new Page<>(pageNum, pageSize);
-        IPage<Upload> files = uploadDAO.selectPage(page, new QueryWrapper<>());
-        return files.convert(item -> UploadDTO.convertFrom(item));
+    public IPage<UploadDTO> listFiles(IPage<Upload> page) {
+        IPage<Upload> filesPage = uploadDAO.selectPage(page, new QueryWrapper<>());
+        return filesPage.convert(item -> UploadDTO.convertFrom(item));
     }
 
     @Transactional

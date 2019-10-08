@@ -1,6 +1,7 @@
 package com.wuyuncheng.xpress.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wuyuncheng.xpress.model.dto.UploadDTO;
 import com.wuyuncheng.xpress.model.entity.Upload;
 import com.wuyuncheng.xpress.model.param.FileParam;
@@ -8,7 +9,6 @@ import com.wuyuncheng.xpress.service.UploadService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,9 +23,10 @@ public class UploadController {
     @ApiOperation("获取文件列表")
     @GetMapping("/files")
     @ResponseStatus(HttpStatus.OK)
-    public IPage<UploadDTO> listFiles(@RequestParam Integer page,
-                                      @RequestParam Integer size) {
-        return uploadService.listFiles(page, size);
+    public IPage<UploadDTO> listFiles(@RequestParam("page") Integer pageNum,
+                                      @RequestParam("size") Integer pageSize) {
+        IPage<Upload> page = new Page<>(pageNum, pageSize);
+        return uploadService.listFiles(page);
     }
 
     @ApiOperation("删除文件")

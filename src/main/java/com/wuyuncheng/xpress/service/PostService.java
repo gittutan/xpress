@@ -8,7 +8,10 @@ import com.wuyuncheng.xpress.model.param.PostParam;
 
 public interface PostService extends IService<Post> {
 
-    IPage<PostDTO> listPosts(Integer pageNum, Integer pageSize);
+    IPage<PostDTO> listPosts(IPage<Post> page);
+    IPage<PostDTO> listPublishPosts(IPage<Post> page);
+    IPage<PostDTO> listPublishPostsByCategoryId(Integer categoryId, IPage<Post> page);
+    IPage<PostDTO> listPublishPostsByTagId(Integer tagId, IPage<Post> page);
     void removePost(Integer postId);
     void createPost(PostParam postParam);
     PostDTO getPost(Integer postId);

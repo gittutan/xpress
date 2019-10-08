@@ -35,6 +35,8 @@
                     #{item}
                 </foreach>
             </if>
+--             条件为不成立就不能更新数据
+            <if test="null == list and list.size() == 0">1=0</if>
         </where>
     </update>
 
@@ -48,8 +50,9 @@
                     #{item}
                 </foreach>
             </if>
+--             条件为不成立就查不到数据
+            <if test="null == collection or collection.size() == 0">and 1=0</if>
         </where>
-
     </select>
 
 </mapper>

@@ -7,7 +7,7 @@ import com.wuyuncheng.xpress.model.param.FileParam;
 
 public interface UploadService {
 
-    IPage<UploadDTO> listFiles(Integer pageNum, Integer pageSize);
+    IPage<UploadDTO> listFiles(IPage<Upload> page);
     void removeFile(Integer uploadId);
     Upload createFile(FileParam fileParam);
 

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface RelationshipDAO extends BaseMapper<Relationship> {
     List<Integer> selectTagIdsByPostId(Integer postId);
+    List<Integer> selectPostIdsByTagId(Integer tagId);
 }

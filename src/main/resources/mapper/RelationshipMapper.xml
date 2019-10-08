@@ -5,23 +5,16 @@
 
 <mapper namespace="com.wuyuncheng.xpress.model.dao.RelationshipDAO">
 
-        <select id="selectTagIdsByPostId" resultType="Integer">
-            SELECT meta_id
-            FROM `relationship`
-            WHERE post_id = #{postId}
-        </select>
+    <select id="selectTagIdsByPostId" resultType="Integer">
+        SELECT meta_id
+        FROM `relationship`
+        WHERE post_id = #{postId}
+    </select>
 
-    <!--<delete id="deleteByPostIds">-->
-        <!--DELETE FROM relationship-->
-        <!--<where>-->
-            <!--<if test="null != collection and collection.size() > 0">-->
-                <!--post_id IN-->
-                <!--<foreach collection="collection" item="item" index="index" open="(" close=")" separator=",">-->
-                    <!--#{item}-->
-                <!--</foreach>-->
-            <!--</if>-->
-        <!--</where>-->
-
-    <!--</delete>-->
+    <select id="selectPostIdsByTagId" resultType="Integer">
+        SELECT post_id
+        FROM `relationship`
+        WHERE meta_id = #{tagId}
+    </select>
 
 </mapper>

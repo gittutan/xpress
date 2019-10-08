@@ -20,4 +20,9 @@ public class RelationshipServiceImpl extends ServiceImpl<RelationshipDAO, Relati
         return relationshipDAO.selectTagIdsByPostId(postId);
     }
 
+    @Override
+    public List<Integer> listPostIdsByTagId(Integer tagId) {
+        return relationshipDAO.selectPostIdsByTagId(tagId);
+    }
+
 }

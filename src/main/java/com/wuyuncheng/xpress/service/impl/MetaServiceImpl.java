@@ -102,6 +102,19 @@ public class MetaServiceImpl extends ServiceImpl<MetaDAO, Meta> implements MetaS
         return MetaDTO.convertFrom(meta);
     }
 
+    @Override
+    public Meta getMetaBySlug(String slug, MetaType metaType) {
+        Meta meta = metaDAO.selectOne(
+                new QueryWrapper<Meta>()
+                        .eq("slug", slug)
+                        .eq("type", metaType.getValue())
+        );
+        if (null == meta) {
+            throw new NotFoundException(metaType.getDescription() + "不存在");
+        }
+        return meta;
+    }
+
     @Transactional
     @Override
     public void updateMeta(MetaParam metaParam, Integer metaId, MetaType metaType) {

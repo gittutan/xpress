@@ -38,6 +38,7 @@ public class PageServiceImpl implements PageService {
         return pageDTOList;
     }
 
+    @Transactional
     @Override
     public void removePage(Integer pageId) {
         pageMustExist(pageId);

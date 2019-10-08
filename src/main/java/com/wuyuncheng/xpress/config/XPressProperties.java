@@ -29,4 +29,9 @@ public class XPressProperties {
      */
     private String uploadPath = "D:\\upload\\";
 
+    /**
+     * Front end page size
+     */
+    private Integer pageSize = 10;
+
 }

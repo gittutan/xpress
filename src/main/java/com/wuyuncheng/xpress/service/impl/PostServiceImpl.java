@@ -2,7 +2,6 @@ package com.wuyuncheng.xpress.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
@@ -12,6 +11,7 @@ import com.wuyuncheng.xpress.model.entity.Meta;
 import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.entity.Relationship;
 import com.wuyuncheng.xpress.model.enums.MetaType;
+import com.wuyuncheng.xpress.model.enums.PostStatus;
 import com.wuyuncheng.xpress.model.enums.PostType;
 import com.wuyuncheng.xpress.model.param.PostParam;
 import com.wuyuncheng.xpress.service.MetaService;
@@ -38,12 +38,45 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
     private RelationshipService relationshipService;
 
     @Override
-    public IPage<PostDTO> listPosts(Integer pageNum, Integer pageSize) {
-        IPage<Post> page = new Page<>(pageNum, pageSize);
+    public IPage<PostDTO> listPosts(IPage<Post> page) {
         QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
                 .eq("type", PostType.POST.getValue());
+        IPage<Post> postsPage = postDAO.selectPage(page, queryWrapper);
+        return postsPage.convert(post -> PostDTO.convertFrom(post));
+    }
+
+    @Override
+    public IPage<PostDTO> listPublishPosts(IPage<Post> page) {
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
+                .eq("type", PostType.POST.getValue())
+                .eq("status", PostStatus.PUBLISH.getValue())
+                .orderByDesc("created");
+        IPage<Post> postsPage = postDAO.selectPage(page, queryWrapper);
+        return postsPage.convert(post -> PostDTO.convertFrom(post));
+    }
+
+    @Override
+    public IPage<PostDTO> listPublishPostsByCategoryId(Integer categoryId, IPage<Post> page) {
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
+                .eq("category_id", categoryId)
+                .eq("type", PostType.POST.getValue())
+                .eq("status", PostStatus.PUBLISH.getValue())
+                .orderByDesc("created");
         IPage<Post> posts = postDAO.selectPage(page, queryWrapper);
         return posts.convert(post -> PostDTO.convertFrom(post));
+    }
+
+    @Transactional
+    @Override
+    public IPage<PostDTO> listPublishPostsByTagId(Integer tagId, IPage<Post> page) {
+        List<Integer> postIds = relationshipService.listPostIdsByTagId(tagId);
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
+                .eq("type", PostType.POST.getValue())
+                .eq("status", PostStatus.PUBLISH.getValue())
+                .in("post_id", postIds)
+                .orderByDesc("created");
+        IPage<Post> postPage = postDAO.selectPage(page, queryWrapper);
+        return postPage.convert(post -> PostDTO.convertFrom(post));
     }
 
     @Transactional
@@ -98,6 +131,7 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
         return postDTO;
     }
 
+    @Transactional
     @Override
     public PostDTO getPostBySlugOrId(String slugOrId) {
         Post post = postDAO.selectOne(

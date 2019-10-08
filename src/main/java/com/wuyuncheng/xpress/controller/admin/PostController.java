@@ -1,14 +1,15 @@
 package com.wuyuncheng.xpress.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wuyuncheng.xpress.model.dto.PostDTO;
+import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.param.PostParam;
 import com.wuyuncheng.xpress.service.PostService;
 import com.wuyuncheng.xpress.model.vo.MessageResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,9 +24,10 @@ public class PostController {
     @ApiOperation("获取文章列表")
     @GetMapping("/posts")
     @ResponseStatus(HttpStatus.OK)
-    public IPage<PostDTO> listPosts(@RequestParam Integer page,
-                                    @RequestParam Integer size) {
-        return postService.listPosts(page, size);
+    public IPage<PostDTO> listPosts(@RequestParam("page") Integer pageNum,
+                                    @RequestParam("size") Integer pageSize) {
+        IPage<Post> page = new Page<>(pageNum, pageSize);
+        return postService.listPosts(page);
     }
 
     @ApiOperation("删除文章")

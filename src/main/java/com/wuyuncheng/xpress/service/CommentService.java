@@ -5,7 +5,7 @@ import com.wuyuncheng.xpress.model.entity.Comment;
 
 public interface CommentService {
 
-    IPage<Comment> listComments(Integer pageNum, Integer pageSize);
+    IPage<Comment> listComments(IPage<Comment> page);
     void removeComment(Integer id);
     void approveComment(Integer id);
 

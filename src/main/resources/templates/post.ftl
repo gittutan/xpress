@@ -19,9 +19,11 @@
                 </div>
 
                 <div class="tag-container">
-                    <a href="https://wuyuncheng.com/tag/hN6Y5kwIP" class="tag">
-                        Java
-                    </a>
+                    <#list tags as tag>
+                        <a href="${link_to("/tag/" + tag.slug)}" class="tag">
+                            ${tag.name}
+                        </a>
+                    </#list>
                 </div>
 
             </div>

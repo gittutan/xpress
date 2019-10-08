@@ -15,6 +15,7 @@ public interface MetaService extends IService<Meta> {
     void removeMeta(Integer metaId, MetaType metaType);
     void createMeta(MetaParam metaParam, MetaType metaType);
     MetaDTO getMeta(Integer metaId, MetaType metaType);
+    Meta getMetaBySlug(String slug, MetaType metaType);
     void updateMeta(MetaParam metaParam, Integer metaId, MetaType metaType);
     boolean decrementCountById(Integer metaId);
     boolean decrementCountByPostId(Integer postId);

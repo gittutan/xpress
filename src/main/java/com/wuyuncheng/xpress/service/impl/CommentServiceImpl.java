@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.List;
-
 @Service
 public class CommentServiceImpl implements CommentService {
 
@@ -22,8 +20,7 @@ public class CommentServiceImpl implements CommentService {
     private CommentDAO commentDAO;
 
     @Override
-    public IPage<Comment> listComments(Integer pageNum, Integer pageSize) {
-        IPage<Comment> page = new Page<>(pageNum, pageSize);
+    public IPage<Comment> listComments(IPage<Comment> page) {
         return commentDAO.selectPage(page, new QueryWrapper<>());
     }
 

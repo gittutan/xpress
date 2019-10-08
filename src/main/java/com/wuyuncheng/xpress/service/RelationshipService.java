@@ -8,5 +8,6 @@ import java.util.List;
 public interface RelationshipService extends IService<Relationship> {
 
     List<Integer> listTagIdsByPostId(Integer postId);
+    List<Integer> listPostIdsByTagId(Integer tagId);
 
 }
