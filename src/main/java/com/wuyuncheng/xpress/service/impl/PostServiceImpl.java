@@ -150,8 +150,7 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
         if (null == post) {
             throw new NotFoundException("文章未找到");
         }
-        PostDTO postDTO = PostDTO.convertFrom(post);
-        return postDTO;
+        return PostDTO.convertFrom(post);
     }
 
     @Transactional

@@ -18,13 +18,15 @@
                     ${post.content}
                 </div>
 
-                <div class="tag-container">
-                    <#list tags as tag>
-                        <a href="${link_to("/tag/" + tag.slug)}" class="tag">
-                            ${tag.name}
-                        </a>
-                    </#list>
-                </div>
+                <#if tags??>
+                    <div class="tag-container">
+                        <#list tags as tag>
+                            <a href="${link_to("/tag/" + tag.slug)}" class="tag">
+                                ${tag.name}
+                            </a>
+                        </#list>
+                    </div>
+                </#if>
 
             </div>
         </div>

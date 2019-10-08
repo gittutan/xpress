@@ -5,6 +5,7 @@ import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.PostDAO;
 import com.wuyuncheng.xpress.model.dto.PageDTO;
+import com.wuyuncheng.xpress.model.dto.PostDTO;
 import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.enums.PostType;
 import com.wuyuncheng.xpress.model.param.PageParam;
@@ -76,6 +77,28 @@ public class PageServiceImpl implements PageService {
         }
         PageDTO pageDTO = PageDTO.convertFrom(page);
         return pageDTO;
+    }
+
+    @Transactional
+    @Override
+    public PageDTO getPageBySlugOrId(String slugOrId) {
+        Post page = postDAO.selectOne(
+                new QueryWrapper<Post>()
+                        .eq("slug", slugOrId)
+                        .eq("type", PostType.PAGE.getValue())
+        );
+        if (null == page) {
+            Integer id = Integer.valueOf(slugOrId);
+            page = postDAO.selectOne(
+                    new QueryWrapper<Post>()
+                            .eq("post_id", id)
+                            .eq("type", PostType.PAGE.getValue())
+            );
+        }
+        if (null == page) {
+            throw new NotFoundException("页面未找到");
+        }
+        return PageDTO.convertFrom(page);
     }
 
     @Transactional
