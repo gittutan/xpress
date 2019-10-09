@@ -561,6 +561,8 @@ a {
     margin-bottom: 24px;
     font-size: 18px;
     color: #495057;
+    word-wrap: break-word;
+    overflow: hidden;
 }
 
 .post-detail .post-content p code {
