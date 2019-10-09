@@ -30,6 +30,7 @@ public class PageServiceImpl implements PageService {
         List<Post> posts = postDAO.selectList(
                 new QueryWrapper<Post>()
                         .eq("type", PostType.PAGE.getValue())
+                        .orderByDesc("created")
         );
         List<PageDTO> pageDTOList = new ArrayList<>();
         for (Post post : posts) {

@@ -1,5 +1,6 @@
 package com.wuyuncheng.xpress.util;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
@@ -46,6 +47,15 @@ public class XPressUtils {
     public static String markdownToHTML(String markdown) {
         Node document = SingletonInstance.parser.parse(markdown);
         return SingletonInstance.renderer.render(document);
+    }
+
+    public static String getRequestIP() {
+        return ServletUtil.getClientIP(getCurrentRequest().get());
+    }
+
+    public static String getRequestUserAgent() {
+        HttpServletRequest request = getCurrentRequest().get();
+        return request.getHeader("user-agent");
     }
 
 }

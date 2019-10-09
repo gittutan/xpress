@@ -14,7 +14,7 @@ spring:
     password: root
   mvc:
     favicon:
-      enabled: false
+      enabled: true # Use SpringMVC default favicon.ico
 #  cache:
 #    type: redis # Spring Cache Use Redis
 #  redis:

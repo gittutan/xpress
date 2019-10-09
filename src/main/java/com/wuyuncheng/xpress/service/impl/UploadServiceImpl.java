@@ -34,7 +34,10 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public IPage<UploadDTO> listFiles(IPage<Upload> page) {
-        IPage<Upload> filesPage = uploadDAO.selectPage(page, new QueryWrapper<>());
+        IPage<Upload> filesPage = uploadDAO.selectPage(page,
+                new QueryWrapper<Upload>()
+                        .orderByDesc("created")
+        );
         return filesPage.convert(item -> UploadDTO.convertFrom(item));
     }
 

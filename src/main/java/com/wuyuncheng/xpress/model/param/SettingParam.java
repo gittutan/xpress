@@ -23,4 +23,7 @@ public class SettingParam {
     @ApiModelProperty("网站URL")
     private String siteURL;
 
+    @ApiModelProperty("网站LOGO")
+    private String logo;
+
 }

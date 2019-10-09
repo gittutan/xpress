@@ -36,6 +36,7 @@ public class SettingServiceImpl implements SettingService {
         optionDAO.updateOptions("keywords", settingParam.getKeywords());
         optionDAO.updateOptions("navbar", settingParam.getNavbar());
         optionDAO.updateOptions("siteURL", settingParam.getSiteURL());
+        optionDAO.updateOptions("logo", settingParam.getLogo());
     }
 
 }

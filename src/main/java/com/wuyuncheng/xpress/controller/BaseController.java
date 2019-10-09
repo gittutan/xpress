@@ -21,6 +21,7 @@ public class BaseController {
             model.addAttribute("description", settings.get("description"));
             model.addAttribute("navbar", settings.get("navbar"));
             model.addAttribute("siteURL", settings.get("siteURL"));
+            model.addAttribute("logo", settings.get("logo"));
         }
         return view;
     }

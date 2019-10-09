@@ -40,7 +40,8 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
     @Override
     public IPage<PostDTO> listPosts(IPage<Post> page) {
         QueryWrapper<Post> queryWrapper = new QueryWrapper<Post>()
-                .eq("type", PostType.POST.getValue());
+                .eq("type", PostType.POST.getValue())
+                .orderByDesc("created");
         IPage<Post> postsPage = postDAO.selectPage(page, queryWrapper);
         return postsPage.convert(post -> PostDTO.convertFrom(post));
     }
