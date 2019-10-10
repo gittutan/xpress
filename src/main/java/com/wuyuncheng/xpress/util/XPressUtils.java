@@ -1,6 +1,10 @@
 package com.wuyuncheng.xpress.util;
 
 import cn.hutool.extra.servlet.ServletUtil;
+import com.vladsch.flexmark.ext.autolink.AutolinkExtension;
+import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
+import com.vladsch.flexmark.ext.gfm.tasklist.TaskListExtension;
+import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
@@ -11,6 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.Optional;
 
 public class XPressUtils {
@@ -19,9 +24,15 @@ public class XPressUtils {
     }
 
     private static class SingletonInstance {
-        private static final MutableDataSet options = new MutableDataSet();
-        private static final Parser parser = Parser.builder(options).build();
-        private static final HtmlRenderer renderer = HtmlRenderer.builder(options).build();
+        private static final MutableDataSet OPTIONS = new MutableDataSet()
+                .set(Parser.EXTENSIONS, Arrays.asList(
+                        TablesExtension.create(),
+                        TaskListExtension.create(),
+                        StrikethroughExtension.create(),
+                        AutolinkExtension.create())).
+                        set(HtmlRenderer.SOFT_BREAK, "<br />\n");
+        private static final Parser PARSER = Parser.builder(OPTIONS).build();
+        private static final HtmlRenderer RENDERER = HtmlRenderer.builder(OPTIONS).build();
     }
 
     public static boolean isBrowser() {
@@ -45,8 +56,8 @@ public class XPressUtils {
     }
 
     public static String markdownToHTML(String markdown) {
-        Node document = SingletonInstance.parser.parse(markdown);
-        return SingletonInstance.renderer.render(document);
+        Node document = SingletonInstance.PARSER.parse(markdown);
+        return SingletonInstance.RENDERER.render(document);
     }
 
     public static String getRequestIP() {
