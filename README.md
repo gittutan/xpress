@@ -16,8 +16,11 @@
 ## 开始使用
 1. 导入项目根目录下的 sql 数据，`xpress-data.sql`包含测试数据，`xpress.sql`只创建表。
 2. 配置`application.yaml`数据源。
-3. 运行 Spring Boot
-4. 访问后台管理面板`http://yourdomain/admin/index.html`
+3. 运行 Spring Boot。
+4. 访问后台管理面板`http://yourdomain/admin/index.html`。
+> 帐号：admin  
+> 密码：admin888
+
 
 ## 技术栈
 - Spring Boot
@@ -25,7 +28,7 @@
 - Vue.js
 
 ## 许可证
-XPress 使用 MIT 开源协议
+XPress 使用 MIT 开源协议。
 
 ## 预览图
 ![index.png](https://i.loli.net/2019/10/10/mcpuoz7hFlByjJi.png)
