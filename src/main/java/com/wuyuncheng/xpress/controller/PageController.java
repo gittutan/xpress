@@ -21,7 +21,7 @@ public class PageController extends BaseController {
     @Autowired
     private CommentService commentService;
 
-    @GetMapping("/{slugOrId}")
+    @GetMapping("/page/{slugOrId}")
     public String getPage(@PathVariable String slugOrId,
                           Model model) {
         PageDTO page = pageService.getPageBySlugOrId(slugOrId);

@@ -37,7 +37,7 @@
 
             <#if pageCount gt page.current>
                 <div class="pagination-container">
-                    <a href="${link_to("/page/" + (page.current + 1))}" class="next">下一页 <i class="icon-arrow-ios-forward-outline"></i></a>
+                    <a href="${link_to("/posts?p=" + (page.current + 1))}" class="next">下一页 <i class="icon-arrow-ios-forward-outline"></i></a>
                 </div>
             </#if>
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -36,23 +37,12 @@ public class TagController extends BaseController {
     }
 
     @GetMapping("tag/{slug}")
-    public String getPostsByTag(@PathVariable String slug,
-                                Model model) {
-        Meta tag = metaService.getMetaBySlug(slug, MetaType.TAG);
-        model.addAttribute("tag", tag);
-        IPage<Post> postPage = new Page<>(1, properties.getPageSize());
-        IPage<PostDTO> posts = postService.listPublishPostsByTagId(tag.getMetaId(), postPage);
-        model.addAttribute("page", posts);
-        return render("tag", model);
-    }
-
-    @GetMapping("tag/{slug}/page/{pageSize}")
     public String getPostsByTagAndPage(@PathVariable String slug,
-                                       @PathVariable Integer pageSize,
+                                       @RequestParam(value = "p", required = false, defaultValue = "1") Integer pageNum,
                                        Model model) {
         Meta tag = metaService.getMetaBySlug(slug, MetaType.TAG);
         model.addAttribute("tag", tag);
-        IPage<Post> postPage = new Page<>(pageSize, properties.getPageSize());
+        IPage<Post> postPage = new Page<>(pageNum, properties.getPageSize());
         IPage<PostDTO> posts = postService.listPublishPostsByTagId(tag.getMetaId(), postPage);
         model.addAttribute("page", posts);
         return render("tag", model);

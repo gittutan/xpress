@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -36,23 +37,12 @@ public class CategoryController extends BaseController {
     }
 
     @GetMapping("category/{slug}")
-    public String getPostsByCategory(@PathVariable String slug,
-                                     Model model) {
-        Meta category = metaService.getMetaBySlug(slug, MetaType.CATEGORY);
-        model.addAttribute("category", category);
-        IPage<Post> postPage = new Page<>(1, properties.getPageSize());
-        IPage<PostDTO> posts = postService.listPublishPostsByCategoryId(category.getMetaId(), postPage);
-        model.addAttribute("page", posts);
-        return render("category", model);
-    }
-
-    @GetMapping("category/{slug}/page/{pageSize}")
     public String getPostsByCategoryAndPage(@PathVariable String slug,
-                                            @PathVariable Integer pageSize,
+                                            @RequestParam(value = "p", required = false, defaultValue = "1") Integer pageNum,
                                             Model model) {
         Meta category = metaService.getMetaBySlug(slug, MetaType.CATEGORY);
         model.addAttribute("category", category);
-        IPage<Post> postPage = new Page<>(pageSize, properties.getPageSize());
+        IPage<Post> postPage = new Page<>(pageNum, properties.getPageSize());
         IPage<PostDTO> posts = postService.listPublishPostsByCategoryId(category.getMetaId(), postPage);
         model.addAttribute("page", posts);
         return render("category", model);
