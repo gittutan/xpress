@@ -3,12 +3,11 @@
 > XPress 是一款基于 Spring Boot + Vue.js 构建的博客系统。
 
 <p align="center">
-<a href="https://github.com/wuyc/xpress/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/wuyc/xpress"></a>
-<a href="#"><img alt="JDK" src="https://img.shields.io/badge/JDK-1.8-yellow.svg"/></a>
-<a href="#"><img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/wuyc/xpress"></a>
-<a href="#"><img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/wuyc/xpress"></a>
-<a href="#"><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/wuyc/xpress"></a>
-<a href="https://github.com/wuyc/xpress/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/wuyc/xpress.svg"/></a>
+<a href="https://travis-ci.org/wuyc/xpress"><img alt="Travis CI" src="https://img.shields.io/travis/wuyc/xpress/master?style=flat-square"></a>
+<a href="#"><img alt="JDK" src="https://img.shields.io/badge/JDK-1.8-yellow?style=flat-square"/></a>
+<a href="#"><img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/wuyc/xpress?style=flat-square"></a>
+<a href="#"><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/wuyc/xpress?style=flat-square"></a>
+<a href="https://github.com/wuyc/xpress/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/wuyc/xpress?style=flat-square"/></a>
 </p>
 
 ---
