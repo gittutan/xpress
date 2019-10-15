@@ -12,6 +12,9 @@
 
 ---
 
+- 前端项目：https://github.com/wuyc/xpress-admin
+- 项目总结：https://wuyuncheng.com/post/summary-of-xpress-development/
+
 ## 开始使用
 1. 导入项目根目录下的 sql 数据，`xpress-data.sql`包含测试数据，`xpress.sql`只创建表。
 2. 配置`application.yaml`数据源。
