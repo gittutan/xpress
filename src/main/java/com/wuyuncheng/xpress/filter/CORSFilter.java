@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class CorsFilter extends GenericFilterBean {
+public class CORSFilter extends GenericFilterBean {
 
 //    private final String ALLOW_HEADERS = "X-Token" + ", " + HttpHeaders.CONTENT_TYPE;
 

@@ -1,6 +1,7 @@
 package com.wuyuncheng.xpress.config;
 
-import com.wuyuncheng.xpress.filter.CorsFilter;
+import com.wuyuncheng.xpress.filter.CORSFilter;
+import com.wuyuncheng.xpress.filter.XSSFilter;
 import org.apache.coyote.http11.AbstractHttp11Protocol;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
@@ -15,12 +16,22 @@ import org.springframework.core.Ordered;
 public class XPressConfiguration {
 
     @Bean
-    public FilterRegistrationBean<CorsFilter> corsFilterRegistration() {
-        FilterRegistrationBean<CorsFilter> frb = new FilterRegistrationBean<>();
-        frb.setFilter(new CorsFilter());
-        frb.setName("CorsFilter");
+    public FilterRegistrationBean<CORSFilter> corsFilterRegistration() {
+        FilterRegistrationBean<CORSFilter> frb = new FilterRegistrationBean<>();
+        frb.setFilter(new CORSFilter());
+        frb.setName("CORSFilter");
         frb.setOrder(Ordered.HIGHEST_PRECEDENCE);
         frb.addUrlPatterns("/api/*");
+        return frb;
+    }
+
+    @Bean
+    public FilterRegistrationBean<XSSFilter> xssFilterRegistration() {
+        FilterRegistrationBean<XSSFilter> frb = new FilterRegistrationBean<>();
+        frb.setFilter(new XSSFilter());
+        frb.setName("XSSFilter");
+        frb.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        frb.addUrlPatterns("/*");
         return frb;
     }
 
