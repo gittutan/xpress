@@ -14,6 +14,7 @@ import com.wuyuncheng.xpress.model.enums.MetaType;
 import com.wuyuncheng.xpress.model.enums.PostStatus;
 import com.wuyuncheng.xpress.model.enums.PostType;
 import com.wuyuncheng.xpress.model.param.PostParam;
+import com.wuyuncheng.xpress.service.CommentService;
 import com.wuyuncheng.xpress.service.MetaService;
 import com.wuyuncheng.xpress.service.PostService;
 import com.wuyuncheng.xpress.service.RelationshipService;
@@ -36,6 +37,8 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
     private MetaService metaService;
     @Autowired
     private RelationshipService relationshipService;
+    @Autowired
+    private CommentService commentService;
 
     @Override
     public IPage<PostDTO> listPosts(IPage<Post> page) {
@@ -92,6 +95,8 @@ public class PostServiceImpl extends ServiceImpl<PostDAO, Post> implements PostS
         deleteTagsByPostId(postId);
         // 删除 post 表中的文章
         int row = postDAO.deleteById(postId);
+        // 删除文章的所以评论
+        commentService.removeCommentByPostId(postId);
         Assert.state(row != 0, "文章删除失败");
     }
 

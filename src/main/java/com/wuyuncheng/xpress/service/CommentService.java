@@ -11,6 +11,7 @@ public interface CommentService {
     IPage<Comment> listComments(IPage<Comment> page);
     List<Comment> listApproveCommentsByPostId(Integer postId);
     void removeComment(Integer id);
+    void removeCommentByPostId(Integer postId);
     void approveComment(Integer id);
     void createComment(CommentParam commentParam);
 

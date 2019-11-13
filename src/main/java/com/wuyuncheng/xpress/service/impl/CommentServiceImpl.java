@@ -53,6 +53,15 @@ public class CommentServiceImpl implements CommentService {
         Assert.state(row != 0, "删除失败");
     }
 
+    @Override
+    public void removeCommentByPostId(Integer postId) {
+        int row = commentDAO.delete(
+                new QueryWrapper<Comment>()
+                        .eq("post_id", postId)
+        );
+        Assert.state(row != 0, "删除失败");
+    }
+
     @Transactional
     @Override
     public void approveComment(Integer id) {

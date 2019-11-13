@@ -5,10 +5,10 @@ import com.wuyuncheng.xpress.exception.AlreadyExistsException;
 import com.wuyuncheng.xpress.exception.NotFoundException;
 import com.wuyuncheng.xpress.model.dao.PostDAO;
 import com.wuyuncheng.xpress.model.dto.PageDTO;
-import com.wuyuncheng.xpress.model.dto.PostDTO;
 import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.enums.PostType;
 import com.wuyuncheng.xpress.model.param.PageParam;
+import com.wuyuncheng.xpress.service.CommentService;
 import com.wuyuncheng.xpress.service.PageService;
 import com.wuyuncheng.xpress.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,8 @@ public class PageServiceImpl implements PageService {
 
     @Autowired
     private PostDAO postDAO;
+    @Autowired
+    private CommentService commentService;
 
     @Override
     public List<PageDTO> listPages() {
@@ -46,6 +48,8 @@ public class PageServiceImpl implements PageService {
         pageMustExist(pageId);
 
         int row = postDAO.deleteById(pageId);
+        // 删除页面的所以评论
+        commentService.removeCommentByPostId(pageId);
         Assert.state(row != 0, "页面删除失败");
     }
 
