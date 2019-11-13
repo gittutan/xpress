@@ -10,10 +10,12 @@ import com.wuyuncheng.xpress.model.dao.UserDAO;
 import com.wuyuncheng.xpress.model.dto.UserDTO;
 import com.wuyuncheng.xpress.model.entity.Post;
 import com.wuyuncheng.xpress.model.entity.User;
+import com.wuyuncheng.xpress.model.enums.PostType;
 import com.wuyuncheng.xpress.model.param.LoginParam;
 import com.wuyuncheng.xpress.model.param.UserParam;
 import com.wuyuncheng.xpress.model.vo.AuthInfo;
 import com.wuyuncheng.xpress.service.AdminService;
+import com.wuyuncheng.xpress.service.PageService;
 import com.wuyuncheng.xpress.service.PostService;
 import com.wuyuncheng.xpress.util.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
     private UserDAO userDAO;
     @Autowired
     private PostService postService;
+    @Autowired
+    private PageService pageService;
 
     @Override
     public AuthInfo getToken(LoginParam loginParam) {
@@ -80,13 +84,17 @@ public class AdminServiceImpl extends ServiceImpl<UserDAO, User> implements Admi
         userMustExist(userId);
 
         // 删除该用户发布的所有文章
-        postService.remove(
+        List<Post> postsDelete = postService.list(
                 new QueryWrapper<Post>()
                         .eq("author_id", userId)
         );
-
-        int row = userDAO.deleteById(userId);
-        Assert.state(row != 0, "用户删除失败");
+        for (Post post : postsDelete) {
+            if (PostType.POST.getValue().equals(post.getType())) {
+                postService.removePost(post.getPostId());
+            } else {
+                pageService.removePage(post.getPostId());
+            }
+        }
     }
 
     @Override
